@@ -16,6 +16,13 @@ class SlangAddViewController: UIViewController {
     
     private var presenter: SlangAddPresenter!
     
+ 
+    
+    
+    var isTitleEmpty: Bool = true
+    
+    var isDescriptionEmpty: Bool = true
+    
     private lazy var titleView: UIView = {
         let view = UIView()
         view.backgroundColor = UIColor.rgb(red: 246, green: 246, blue: 251)
@@ -37,7 +44,7 @@ class SlangAddViewController: UIViewController {
     
     private lazy var slangTitleTextField: UITextField = {
         let view = UITextField()
-        view.placeholder = "Input"
+        view.addTarget(self, action: #selector(editingTitleTextField), for: .editingChanged)
         return view
     }()
     
@@ -69,6 +76,7 @@ class SlangAddViewController: UIViewController {
     private lazy var slangDescriptionTextView: UITextView = {
         let view = UITextView()
         view.backgroundColor = UIColor.rgb(red: 246, green: 246, blue: 251)
+        view.delegate = self
         return view
     }()
     
@@ -100,7 +108,6 @@ class SlangAddViewController: UIViewController {
     
     private lazy var contactTextField: UITextField = {
         let view = UITextField()
-        view.placeholder = "Input"
         return view
     }()
     
@@ -117,6 +124,7 @@ class SlangAddViewController: UIViewController {
         view.backgroundColor = UIColor.rgb(red: 218, green: 218, blue: 218)
         view.layer.cornerRadius = 8
         view.addTarget(self, action: #selector(saveSlangTap), for: .touchUpInside)
+        view.isEnabled = false
         return view
     }()
     
@@ -134,6 +142,28 @@ class SlangAddViewController: UIViewController {
             //tap.cancelsTouchesInView = false
 
         view.addGestureRecognizer(tap)
+    }
+    
+    @objc func editingTitleTextField() {
+        if slangTitleTextField.text == "" {
+            isTitleEmpty = false
+        } else {
+            isTitleEmpty = true
+        }
+        if isTitleEmpty == false && isDescriptionEmpty == false {
+            saveSlangButton.isEnabled = false
+            saveSlangButton.backgroundColor = UIColor.rgb(red: 218, green: 218, blue: 218)
+        } else if isTitleEmpty == true && isDescriptionEmpty == false || isTitleEmpty == false && isDescriptionEmpty == true {
+            saveSlangButton.isEnabled = false
+            saveSlangButton.backgroundColor = UIColor.rgb(red: 218, green: 218, blue: 218)
+        } else {
+            saveSlangButton.isEnabled = true
+            saveSlangButton.backgroundColor = UIColor.rgb(red: 2, green: 126, blue: 216)
+        }
+    }
+    
+    @objc func editingDescriptionTextFiedl() {
+        
     }
     
     @objc func dismissKeyboard() {
@@ -263,7 +293,36 @@ class SlangAddViewController: UIViewController {
     
 }
 
-extension SlangAddViewController: SlangAddView {
+extension SlangAddViewController: SlangAddView, UITextViewDelegate {
     
+    func textViewDidChange(_ textView: UITextView) {
+        if textView.text == "" {
+            isDescriptionEmpty = false
+        } else {
+            isDescriptionEmpty = true
+        }
+        if isTitleEmpty == false && isDescriptionEmpty == false {
+            saveSlangButton.isEnabled = false
+            saveSlangButton.backgroundColor = UIColor.rgb(red: 218, green: 218, blue: 218)
+        } else if isTitleEmpty == true && isDescriptionEmpty == false || isTitleEmpty == false && isDescriptionEmpty == true {
+            saveSlangButton.isEnabled = false
+            saveSlangButton.backgroundColor = UIColor.rgb(red: 218, green: 218, blue: 218)
+        } else {
+            saveSlangButton.isEnabled = true
+            saveSlangButton.backgroundColor = UIColor.rgb(red: 2, green: 126, blue: 216)
+        }
+        
+        descriptionCharactersAmountLabel.text = "\(textView.text.count)/1000"
+        
+       
+        print(isTitleEmpty)
+        print(isDescriptionEmpty)
+        print(textView.text!)
+    }
     
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        let newText = (textView.text as NSString).replacingCharacters(in: range, with: text)
+        return newText.count <= 1000
+    }
 }
+

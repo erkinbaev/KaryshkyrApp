@@ -17,6 +17,8 @@ protocol SlangListPresenterDelegate: AnyObject {
     
     func presentSlangAddView(viewController: UIViewController)
     
+    func searchSlang(text: String)
+    
 }
 
 class SlangListPresenter : SlangListPresenterDelegate {
@@ -25,6 +27,10 @@ class SlangListPresenter : SlangListPresenterDelegate {
     static var words: [WordModel] = []
     
     var result = WordsResponse(count: 0, next: "", results: words)
+    
+    var filteredResults: [WordModel] = []
+    
+    
     
     required init(view: SlangListView) {
         self.view = view
@@ -39,6 +45,7 @@ class SlangListPresenter : SlangListPresenterDelegate {
                     let test = try JSONDecoder().decode(WordsResponse.self, from: data!)
                     print(test)
                     self.result.results = test.results
+                    self.filteredResults = test.results
                     print(test.results.count)
                     DispatchQueue.main.async {
                         completion()
@@ -61,5 +68,22 @@ class SlangListPresenter : SlangListPresenterDelegate {
     
     func presentSlangAddView(viewController: UIViewController) {
         view.navigate(viewController: viewController)
+    }
+    
+    func searchSlang(text: String) {
+        filteredResults = []
+        
+        if text == "" {
+            filteredResults = self.result.results
+        }
+        
+        for slang in self.result.results {
+            if slang.title.uppercased().contains(text.uppercased()) {
+                filteredResults.append(slang)
+            }
+        }
+        DispatchQueue.main.async {
+            self.view.updateSlangList()
+        }
     }
 }

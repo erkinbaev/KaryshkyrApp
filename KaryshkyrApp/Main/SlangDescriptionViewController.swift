@@ -7,12 +7,29 @@
 
 import Foundation
 import UIKit
+import RealmSwift
 
 class SlangDescriptionViewController: UIViewController {
+    
+    let nc = NotificationCenter.default
+    
+    
+    var counter = 0
+    
+    let realm = try! Realm()
+    
+    var slangs: Results<Slang>?
+    
+    let favouritesViewController = FavouritesViewController()
+    
+    let mainViewController = MainViewController()
+    
+    let slangListViewController = SlangListViewController()
 
    lazy var slangTitleLabel: UILabel = {
         let view = UILabel()
         view.numberOfLines = 0
+       view.textAlignment = .justified
         view.textColor = UIColor.rgb(red: 2, green: 126, blue: 216)
         view.font = UIFont.systemFont(ofSize: 22, weight: .bold)
         return view
@@ -20,8 +37,11 @@ class SlangDescriptionViewController: UIViewController {
     
     lazy var addToFavouritesImageView: UIImageView = {
         let view = UIImageView()
-        view.image = UIImage(systemName: "heart")
-        view.contentMode = .scaleAspectFill
+        view.image = UIImage(named: "fav")
+        view.contentMode = .scaleToFill
+        view.isUserInteractionEnabled = true
+        let tap = UITapGestureRecognizer(target: self, action: #selector(addToFavouritesTap))
+        view.addGestureRecognizer(tap)
         return view
     }()
     
@@ -36,7 +56,48 @@ class SlangDescriptionViewController: UIViewController {
         view.backgroundColor = .white
         setupSubviews()
         
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        nc.post(name: Notification.Name("dismissed"), object: nil)
+    }
+    
+    @objc func addToFavouritesTap() {
+        if counter == 0 {
+            addToFavouritesImageView.image = UIImage(named: "fav_fill")
+            counter += 1
+            
+            let favorites = realm.objects(Favourites.self).first
+            
+            let slang = Slang()
+            slang.title = slangTitleLabel.text!
+            
+            
+            
+            try! realm.write({
+                //realm.add(slang)
+                favorites?.favourites.insert(slang, at: 0)
+            })
+            
+            nc.post(name: Notification.Name("UserLoggedIn"), object: nil)
+        } else {
+            addToFavouritesImageView.image = UIImage(named: "fav")
+            counter = 0
+            let slang = Slang()
+            slang.title = slangTitleLabel.text!
+            
+//            for index in 0..<slangs!.count {
+//                if slangs![index].title == slang.title {
+//                    try! realm.write({
+//                        realm.delete(slang)
+//                    })
+//                }
+//            }
+            
+        }
         
+      
+       
     }
     
     func setupSubviews() {
@@ -51,7 +112,7 @@ class SlangDescriptionViewController: UIViewController {
         slangTitleLabel.translatesAutoresizingMaskIntoConstraints = false
         slangTitleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 28).isActive = true
         slangTitleLabel.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 22).isActive = true
-        slangTitleLabel.rightAnchor.constraint(equalTo: addToFavouritesImageView.leftAnchor, constant: 45).isActive = true
+        slangTitleLabel.widthAnchor.constraint(equalToConstant: 298).isActive = true
         
         view.addSubview(slangDescriptionLabel)
         slangDescriptionLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -60,6 +121,11 @@ class SlangDescriptionViewController: UIViewController {
         slangDescriptionLabel.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -27).isActive = true
     }
     
+}
+
+class Slang: Object {
+    @objc dynamic var title = ""
+    @objc dynamic var isSelected = false
 }
 
 

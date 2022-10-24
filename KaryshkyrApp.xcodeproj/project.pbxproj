@@ -13,8 +13,15 @@
 		CE285E3528F9558E0040BE6E /* SlangListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE285E3428F9558E0040BE6E /* SlangListViewController.swift */; };
 		CE285E3828F9558E0040BE6E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CE285E3628F9558E0040BE6E /* Main.storyboard */; };
 		CE285E3A28F955910040BE6E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CE285E3928F955910040BE6E /* Assets.xcassets */; };
-		CE285E3D28F955910040BE6E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CE285E3B28F955910040BE6E /* LaunchScreen.storyboard */; };
 		CE285E4528F9621A0040BE6E /* SlangCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE285E4428F9621A0040BE6E /* SlangCell.swift */; };
+		CE54D24D2903F38900CD45EA /* FavouriteAlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE54D24C2903F38900CD45EA /* FavouriteAlertView.swift */; };
+		CE54D24F2904075700CD45EA /* AlertManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE54D24E2904075700CD45EA /* AlertManager.swift */; };
+		CE54D2732906737600CD45EA /* SplashViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE54D2722906737600CD45EA /* SplashViewController.swift */; };
+		CE54D2762906788D00CD45EA /* Roboto-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CE54D2752906788D00CD45EA /* Roboto-Black.ttf */; };
+		CE54D278290678AD00CD45EA /* Roboto-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CE54D277290678AD00CD45EA /* Roboto-Bold.ttf */; };
+		CE54D27A290679B400CD45EA /* RobotoLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CE54D279290679B400CD45EA /* RobotoLight.ttf */; };
+		CE54D27C290679C600CD45EA /* Roboto-Thin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CE54D27B290679C600CD45EA /* Roboto-Thin.ttf */; };
+		CE54D27E29067FB800CD45EA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CE54D27D29067FB800CD45EA /* LaunchScreen.storyboard */; };
 		CE7F11F228F9806A00D93C8D /* SlangsViewBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7F11F128F9806A00D93C8D /* SlangsViewBuilder.swift */; };
 		CE7F11F428F981C100D93C8D /* FavouritesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7F11F328F981C100D93C8D /* FavouritesViewController.swift */; };
 		CE7F125C28FC1D3700D93C8D /* Extension + ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7F125B28FC1D3700D93C8D /* Extension + ViewController.swift */; };
@@ -36,9 +43,16 @@
 		CE285E3428F9558E0040BE6E /* SlangListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlangListViewController.swift; sourceTree = "<group>"; };
 		CE285E3728F9558E0040BE6E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		CE285E3928F955910040BE6E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		CE285E3C28F955910040BE6E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		CE285E3E28F955910040BE6E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		CE285E4428F9621A0040BE6E /* SlangCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlangCell.swift; sourceTree = "<group>"; };
+		CE54D24C2903F38900CD45EA /* FavouriteAlertView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavouriteAlertView.swift; sourceTree = "<group>"; };
+		CE54D24E2904075700CD45EA /* AlertManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertManager.swift; sourceTree = "<group>"; };
+		CE54D2722906737600CD45EA /* SplashViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashViewController.swift; sourceTree = "<group>"; };
+		CE54D2752906788D00CD45EA /* Roboto-Black.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Black.ttf"; sourceTree = "<group>"; };
+		CE54D277290678AD00CD45EA /* Roboto-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Bold.ttf"; sourceTree = "<group>"; };
+		CE54D279290679B400CD45EA /* RobotoLight.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = RobotoLight.ttf; sourceTree = "<group>"; };
+		CE54D27B290679C600CD45EA /* Roboto-Thin.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Thin.ttf"; sourceTree = "<group>"; };
+		CE54D27D29067FB800CD45EA /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		CE7F11F128F9806A00D93C8D /* SlangsViewBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlangsViewBuilder.swift; sourceTree = "<group>"; };
 		CE7F11F328F981C100D93C8D /* FavouritesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavouritesViewController.swift; sourceTree = "<group>"; };
 		CE7F125B28FC1D3700D93C8D /* Extension + ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension + ViewController.swift"; sourceTree = "<group>"; };
@@ -68,7 +82,6 @@
 				7713576823D518153435813E /* Pods-KaryshkyrApp.debug.xcconfig */,
 				008CE693909DC854747F59EA /* Pods-KaryshkyrApp.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -101,6 +114,7 @@
 		CE285E2F28F9558E0040BE6E /* KaryshkyrApp */ = {
 			isa = PBXGroup;
 			children = (
+				CE54D2742906787400CD45EA /* Fonts */,
 				CEB5877129029B80004A6AD2 /* SlangList */,
 				CEB5870928FEA4D7004A6AD2 /* AddSlang */,
 				CEB5870828FEA4C8004A6AD2 /* Main */,
@@ -108,13 +122,26 @@
 				CE285E3028F9558E0040BE6E /* AppDelegate.swift */,
 				CE285E3228F9558E0040BE6E /* SceneDelegate.swift */,
 				CE285E3628F9558E0040BE6E /* Main.storyboard */,
+				CE54D27D29067FB800CD45EA /* LaunchScreen.storyboard */,
 				CE285E3928F955910040BE6E /* Assets.xcassets */,
-				CE285E3B28F955910040BE6E /* LaunchScreen.storyboard */,
 				CE285E3E28F955910040BE6E /* Info.plist */,
 				CE7F125B28FC1D3700D93C8D /* Extension + ViewController.swift */,
 				CEB5871028FFEE31004A6AD2 /* MainViewController.swift */,
+				CE54D24E2904075700CD45EA /* AlertManager.swift */,
+				CE54D2722906737600CD45EA /* SplashViewController.swift */,
 			);
 			path = KaryshkyrApp;
+			sourceTree = "<group>";
+		};
+		CE54D2742906787400CD45EA /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				CE54D27B290679C600CD45EA /* Roboto-Thin.ttf */,
+				CE54D279290679B400CD45EA /* RobotoLight.ttf */,
+				CE54D2752906788D00CD45EA /* Roboto-Black.ttf */,
+				CE54D277290678AD00CD45EA /* Roboto-Bold.ttf */,
+			);
+			path = Fonts;
 			sourceTree = "<group>";
 		};
 		CEB5870728FEA4BB004A6AD2 /* Favourites */ = {
@@ -129,6 +156,7 @@
 			isa = PBXGroup;
 			children = (
 				CE7F125F28FD698A00D93C8D /* SlangDescriptionViewController.swift */,
+				CE54D24C2903F38900CD45EA /* FavouriteAlertView.swift */,
 			);
 			path = Main;
 			sourceTree = "<group>";
@@ -214,9 +242,13 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CE285E3D28F955910040BE6E /* LaunchScreen.storyboard in Resources */,
+				CE54D27C290679C600CD45EA /* Roboto-Thin.ttf in Resources */,
+				CE54D27A290679B400CD45EA /* RobotoLight.ttf in Resources */,
 				CE285E3A28F955910040BE6E /* Assets.xcassets in Resources */,
+				CE54D278290678AD00CD45EA /* Roboto-Bold.ttf in Resources */,
+				CE54D27E29067FB800CD45EA /* LaunchScreen.storyboard in Resources */,
 				CE285E3828F9558E0040BE6E /* Main.storyboard in Resources */,
+				CE54D2762906788D00CD45EA /* Roboto-Black.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -271,6 +303,7 @@
 			files = (
 				CE7F125C28FC1D3700D93C8D /* Extension + ViewController.swift in Sources */,
 				CEB5877729029DAB004A6AD2 /* Models.swift in Sources */,
+				CE54D24F2904075700CD45EA /* AlertManager.swift in Sources */,
 				CEB5871128FFEE31004A6AD2 /* MainViewController.swift in Sources */,
 				CE7F11F428F981C100D93C8D /* FavouritesViewController.swift in Sources */,
 				CE285E3528F9558E0040BE6E /* SlangListViewController.swift in Sources */,
@@ -278,10 +311,12 @@
 				CE285E3128F9558E0040BE6E /* AppDelegate.swift in Sources */,
 				CE7F125E28FC224500D93C8D /* SlangAddViewController.swift in Sources */,
 				CE285E3328F9558E0040BE6E /* SceneDelegate.swift in Sources */,
+				CE54D24D2903F38900CD45EA /* FavouriteAlertView.swift in Sources */,
 				CEB5870B28FEA639004A6AD2 /* SlangAddPresenter.swift in Sources */,
 				CE7F11F228F9806A00D93C8D /* SlangsViewBuilder.swift in Sources */,
 				CE7F126028FD698A00D93C8D /* SlangDescriptionViewController.swift in Sources */,
 				CE285E4528F9621A0040BE6E /* SlangCell.swift in Sources */,
+				CE54D2732906737600CD45EA /* SplashViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -294,14 +329,6 @@
 				CE285E3728F9558E0040BE6E /* Base */,
 			);
 			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
-		CE285E3B28F955910040BE6E /* LaunchScreen.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				CE285E3C28F955910040BE6E /* Base */,
-			);
-			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -436,7 +463,6 @@
 				INFOPLIST_FILE = KaryshkyrApp/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.2;
@@ -466,7 +492,6 @@
 				INFOPLIST_FILE = KaryshkyrApp/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.2;

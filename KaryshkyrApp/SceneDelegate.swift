@@ -10,7 +10,14 @@ import UIKit
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
-
+    
+    
+    
+    
+        
+       
+    
+    
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
@@ -27,13 +34,19 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 //        guard let windowScene = (scene as? UIWindowScene) else { return }
 
 
-            let mainViewController = MainViewController()
-            let navViewController = UINavigationController(rootViewController: mainViewController)
-            window.rootViewController = navViewController
-            window.backgroundColor = .white
-            window.makeKeyAndVisible()
-            self.window = window
+//            let mainViewController = MainViewController()
+//            let navViewController = UINavigationController(rootViewController: mainViewController)
+//            window.rootViewController = navViewController
+//            window.backgroundColor = .white
+//            window.makeKeyAndVisible()
+//            self.window = window
         
+        let splashViewController = SplashViewController()
+        let navViewController = UINavigationController(rootViewController: splashViewController)
+        window.rootViewController = navViewController
+        window.backgroundColor = .white
+        window.makeKeyAndVisible()
+        self.window = window
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {
@@ -64,6 +77,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // to restore the scene back to its current state.
     }
 
+    
 
 }
 

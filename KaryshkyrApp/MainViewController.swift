@@ -11,6 +11,9 @@ import UIKit
 class MainViewController: UITabBarController {
     
     var counter = 0
+    let nc = NotificationCenter.default
+    
+    let alert = FavoriteViewController()
     
     let slangListViewController = SlangListViewController()
     let favouritesViewController = FavouritesViewController()
@@ -26,23 +29,28 @@ class MainViewController: UITabBarController {
         self.delegate = self
         
         title = "Главный"
-        slangListViewController.title = "Список"
-        favouritesViewController.title = "Избранное"
-        slangListViewController.tabBarItem.image = UIImage(systemName: "list.bullet.circle")
-        favouritesViewController.tabBarItem.image = UIImage(systemName: "heart")
-        slangListViewController.tabBarItem.selectedImage = UIImage(systemName: "list.bullet.circle.fill")
-        favouritesViewController.tabBarItem.selectedImage = UIImage(systemName: "heart.fill")
-        
+        //slangListViewController.title = "Список"
+        //favouritesViewController.title = "Избранное"
+        slangListViewController.tabBarItem.image = UIImage(named: "list_text")
+        favouritesViewController.tabBarItem.image = UIImage(named: "fav_text")
+        tabBar.tintColor = .black
+        //slangListViewController.tabBarItem.selectedImage = UIImage(systemName: "list.bullet.circle.fill")
+       // favouritesViewController.tabBarItem.selectedImage = UIImage(systemName: "heart.fill")
+        slangListViewController.tabBarItem.imageInsets = UIEdgeInsets(top: 6, left: 0, bottom: -6, right: 0);
+        favouritesViewController.tabBarItem.imageInsets = UIEdgeInsets(top: 6, left: 0, bottom: -6, right: 0);
         self.setViewControllers([slangListViewController, favouritesViewController], animated: false)
        
         let tabBar = tabBar
         tabBar.selectionIndicatorImage = UIImage().createSelectionIndicator(color: UIColor.rgb(red: 2, green: 126, blue: 216), size: CGSize(width: tabBar.frame.width/CGFloat(tabBar.items!.count), height: tabBar.frame.height), lineWidth: 1.0)
      
         setupSubviews()
+        
+//        nc.addObserver(self, selector: #selector(userLoggedIn), name: Notification.Name("UserLoggedIn"), object: nil)
+//        nc.addObserver(self, selector: #selector(dismissTest), name: Notification.Name("dismissed"), object: nil)
     }
     
     override func viewWillLayoutSubviews() {
-        tabBar.frame = CGRect(x: 0, y: (navigationController?.navigationBar.frame.maxY)!, width: tabBar.frame.size.width, height: tabBar.frame.size.height)
+        tabBar.frame = CGRect(x: 0, y: (self.navigationController?.navigationBar.frame.maxY)!, width: tabBar.frame.size.width, height: tabBar.frame.size.height)
     }
     
     func setupSubviews() {
@@ -77,7 +85,27 @@ class MainViewController: UITabBarController {
             let editBarButton = createCustomBarButton(image: "edit", selector: #selector(test))
             navigationItem.rightBarButtonItem = editBarButton
             counter = 0
+            nc.post(name: Notification.Name("delete"), object: nil)
+            
+            
         }
+        
+    }
+    
+    @objc func userLoggedIn() {
+        title = ""
+        scanButtonTapped()
+        let when = DispatchTime.now() + 3
+        DispatchQueue.main.asyncAfter(deadline: when){
+         
+         // alert.dismiss(animated: true, completion: nil)
+            self.alert.dismissAlert()
+            self.title = "Главный"
+        }
+    }
+    
+    @objc func dismissTest() {
+        alert.dismissAlert()
         
     }
     
@@ -91,6 +119,7 @@ extension MainViewController: UITabBarControllerDelegate {
         if viewController == favouritesViewController {
             let editBarButton = createCustomBarButton(image: "edit", selector: #selector(test))
             navigationItem.rightBarButtonItem = editBarButton
+            favouritesViewController.favouritesTableView.reloadData()
         } else {
             let rightBarItem = createCustomView()
             navigationItem.rightBarButtonItem = rightBarItem
@@ -108,3 +137,23 @@ extension UIImage {
         return image!
     }
 }
+
+extension MainViewController: CustomAlertDelegate {
+    func scanButtonTapped() {
+        //let alert = FavoriteViewController()
+        alert.delegate = self
+        alert.modalPresentationStyle = .overCurrentContext
+        alert.providesPresentationContextTransitionStyle = true
+        alert.definesPresentationContext = true
+        alert.modalTransitionStyle = .crossDissolve
+        present(alert, animated: true, completion: nil)
+        
+       
+    }
+    
+    
+    
+    
+}
+
+

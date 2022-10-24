@@ -15,10 +15,15 @@ class SlangCell: UITableViewCell {
         return view
     }()
     
+    var counter = 0
+    
     lazy var descriptionImageView: UIImageView = {
         let view = UIImageView()
         view.image = UIImage(named: "chevron_right")
         view.contentMode = .scaleAspectFit
+        view.isUserInteractionEnabled = true
+        let tap = UITapGestureRecognizer(target: self, action: #selector(markUnmarkBox))
+        view.addGestureRecognizer(tap)
         return view
     }()
     
@@ -52,5 +57,15 @@ class SlangCell: UITableViewCell {
         underLine.rightAnchor.constraint(equalTo: rightAnchor, constant: -21).isActive = true
         underLine.heightAnchor.constraint(equalToConstant: 0.5).isActive = true
     }
-   
+    
+    @objc func markUnmarkBox() {
+        if counter == 0 {
+            descriptionImageView.image = UIImage(named: "checkmark")
+            counter += 1
+        } else {
+            descriptionImageView.image = UIImage(named: "box")
+            counter = 0
+        }
+    }
+    
 }

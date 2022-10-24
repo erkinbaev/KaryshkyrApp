@@ -7,12 +7,23 @@
 
 import Foundation
 import UIKit
+import RealmSwift
 
 class FavouritesViewController: UIViewController {
     
+    let nc = NotificationCenter.default
+    
     var image: String = "chevron_right"
     
+    let realm = try! Realm()
+    
+    var slangs: Results<Slang>?
+    
     var colors = Colors()
+    
+    var selectedCells: [IndexPath] = []
+    
+    var counter = 0
     
     private lazy var contentView: UIView = {
         let view = UIView()
@@ -47,17 +58,24 @@ class FavouritesViewController: UIViewController {
         
         view.backgroundColor = .white
         setupSubviews()
-       
+        slangs = realm.objects(Slang.self)
+        nc.addObserver(self, selector: #selector(deleteRows), name: Notification.Name("delete"), object: nil)
     }
     
-   
+    @objc func deleteRows() {
+        for i in selectedCells {
+                try! realm.write({
+                        realm.delete(slangs![i.row])
+                        favouritesTableView.reloadData()
+                })
+        }
+        //favouritesTableView.deleteRows(at: [selectedCells], with: .automatic)
+        favouritesTableView.deleteRows(at: selectedCells, with: .automatic)
+        favouritesTableView.reloadData()
+    }
+    
+    
     func setupSubviews() {
-       // createCustomNavigatioBar()
-//        let editBarButton = createLeftCustomButton(image: "edit", selector: #selector(test))
-//        navigationItem.rightBarButtonItem = editBarButton
-//        let editBarButton = createCustomBarButton(image: "edit", selector: #selector(test))
-//        self.navigationItem.rightBarButtonItem = editBarButton
-        
         
         view.addSubview(contentView)
         contentView.translatesAutoresizingMaskIntoConstraints = false
@@ -79,36 +97,22 @@ class FavouritesViewController: UIViewController {
         favouritesTableView.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: 0).isActive = true
         favouritesTableView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: 0).isActive = true
     }
-    
-    @objc func addNewSlangTap() {
-        
-    }
-    
-    @objc func favouritesButtonTap() {
-        
-    }
-    
-    @objc func backButtonTap() {
-        self.navigationController?.popViewController(animated: true)
-        gradientView.removeFromSuperview()
-        
-    }
-    
-    @objc func test() {
-        
-    }
-    
-    func refresh() {
-
-    }
-    
 }
 
 
 extension FavouritesViewController: UITableViewDataSource {
     
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 10
+        if slangs?.count != 0 {
+            return slangs?.count ?? 0
+        }
+        return 0
+        
+       
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -119,10 +123,11 @@ extension FavouritesViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "test_cell", for: indexPath) as! SlangCell
-        cell.slangLabel.text = "Кринж"
+        cell.slangLabel.text = slangs?[indexPath.row].title
         cell.descriptionImageView.image = UIImage(named: image)
         return cell
     }
+
 }
 
 extension FavouritesViewController: UITableViewDelegate {
@@ -130,4 +135,29 @@ extension FavouritesViewController: UITableViewDelegate {
         return 64
     }
     
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        return false
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        selectedCells.append(indexPath)
+    }
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+//        if editingStyle == .delete {
+//            for i in selectedCells {
+//                try! realm.write({
+//                    realm.delete(slangs![i.row])
+//                    favouritesTableView.reloadData()
+//                })
+//            }
+//            tableView.deleteRows(at: selectedCells, with: .automatic)
+//        }
+    }
 }
+
+class Favourites: Object {
+   let favourites = List<Slang>()
+}
+
+

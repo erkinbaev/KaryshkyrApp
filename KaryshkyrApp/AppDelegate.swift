@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import RealmSwift
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -14,11 +15,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-        
-        let navigationBarAppearace = UINavigationBar.appearance()
+        var config = Realm.Configuration(
+            schemaVersion: 2,
+            migrationBlock: { migration, oldSchemaVersion in
+                if (oldSchemaVersion < 1) {}
+        })
+        config.deleteRealmIfMigrationNeeded = true
 
-        navigationBarAppearace.tintColor = UIColor.blue
-        navigationBarAppearace.barTintColor = UIColor.cyan
+        Realm.Configuration.defaultConfiguration = config
+
+        _ = try! Realm()
+      
         return true
     }
 

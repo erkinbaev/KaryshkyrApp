@@ -11,12 +11,18 @@ protocol SlangListView: AnyObject {
     func cellTap(at index: Int)
     
     func navigate(viewController: UIViewController)
+    
+    func updateSlangList()
 }
 
 class SlangListViewController: UIViewController {
     var selectedIndex: IndexPath?
     
     private var presenter: SlangListPresenter!
+    
+    let alert = FavoriteViewController()
+    
+    let nc = NotificationCenter.default
     
     private lazy var contentView: UIView = {
         let view = UIView()
@@ -51,8 +57,8 @@ class SlangListViewController: UIViewController {
         return view
     }()
     
-    private lazy var addSlangView: UIView = {
-        let view = UIView()
+    private lazy var addSlangView: HighlightView = {
+        let view = HighlightView()
         view.backgroundColor = UIColor.rgb(red: 2, green: 126, blue: 216)
         view.layer.cornerRadius = 8
         view.isUserInteractionEnabled = true
@@ -84,9 +90,28 @@ class SlangListViewController: UIViewController {
             self.slangsTableView.reloadData()
         }
         
-        print("list")
+        nc.addObserver(self, selector: #selector(userLoggedIn), name: Notification.Name("UserLoggedIn"), object: nil)
+        nc.addObserver(self, selector: #selector(dismissTest), name: Notification.Name("dismissed"), object: nil)
        
     }
+    
+    @objc func userLoggedIn() {
+        title = ""
+        scanButtonTapped()
+        let when = DispatchTime.now() + 3
+        DispatchQueue.main.asyncAfter(deadline: when){
+         
+         // alert.dismiss(animated: true, completion: nil)
+            self.alert.dismissAlert()
+            self.title = "Главный"
+        }
+    }
+    
+    @objc func dismissTest() {
+        alert.dismissAlert()
+        
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
         self.navigationItem.hidesBackButton = true
     }
@@ -156,7 +181,8 @@ extension SlangListViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return presenter.result.results.count
+       // return presenter.result.results.count
+        return presenter.filteredResults.count
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -167,7 +193,9 @@ extension SlangListViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "slang_cell", for: indexPath) as! SlangCell
-        cell.slangLabel.text = presenter.result.results[indexPath.row].title
+        //cell.slangLabel.text = presenter.result.results[indexPath.row].title
+        
+        cell.slangLabel.text = presenter.filteredResults[indexPath.row].title
         
         if selectedIndex == indexPath {
             cell.backgroundColor = UIColor.white
@@ -219,7 +247,10 @@ extension SlangListViewController: UISearchBarDelegate {
         } else {
             searchBar.setImage(UIImage(), for: .search, state: .normal)
         }
+        
+        presenter.searchSlang(text: searchText)
     }
+
 }
 
 extension SlangListViewController: SlangListView {
@@ -227,20 +258,39 @@ extension SlangListViewController: SlangListView {
         let slangDescriptionViewController = SlangDescriptionViewController()
         if let sheet = slangDescriptionViewController.sheetPresentationController {
             sheet.detents = [.medium()]
+            sheet.largestUndimmedDetentIdentifier = .none
             
         }
-        slangDescriptionViewController.slangTitleLabel.text = presenter.result.results[index].title
-        slangDescriptionViewController.slangDescriptionLabel.text = presenter.result.results[index].description
+        slangDescriptionViewController.slangTitleLabel.text = presenter.filteredResults[index].title
+        slangDescriptionViewController.slangDescriptionLabel.text = presenter.filteredResults[index].description
         present(slangDescriptionViewController, animated: true, completion: nil)
     }
     
     func navigate(viewController: UIViewController) {
         self.navigationController?.pushViewController(viewController, animated: false)
     }
+    
+    func updateSlangList() {
+        slangsTableView.reloadData()
+    }
 }
 
-
-
-
+extension SlangListViewController: CustomAlertDelegate {
+    func scanButtonTapped() {
+        //let alert = FavoriteViewController()
+        alert.delegate = self
+        alert.modalPresentationStyle = .overCurrentContext
+        alert.providesPresentationContextTransitionStyle = true
+        alert.definesPresentationContext = true
+        alert.modalTransitionStyle = .crossDissolve
+        present(alert, animated: true, completion: nil)
+        
+       
+    }
+    
+    
+    
+    
+}
 
 
