@@ -3,7 +3,6 @@
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
-        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <customFonts key="customFonts">
@@ -20,26 +19,28 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="launch" translatesAutoresizingMaskIntoConstraints="NO" id="0xK-u1-FJM">
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="launch" highlightedImage="launch" translatesAutoresizingMaskIntoConstraints="NO" id="0xK-u1-FJM">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
-                                <color key="backgroundColor" red="0.47450980390000003" green="0.76470588240000004" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Made by GeekStudio" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7GH-P7-CkL">
-                                <rect key="frame" x="126" y="808.5" width="162" height="21.5"/>
-                                <fontDescription key="fontDescription" name="Roboto-Light" family="Roboto" pointSize="18"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Made by GeekStudio" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Wn5-EU-0Q8">
+                                <rect key="frame" x="130.5" y="843" width="153" height="21"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="21" id="tsZ-Zd-0WJ"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="Roboto-Light" family="Roboto" pointSize="17"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
-                        <viewLayoutGuide key="safeArea" id="iSI-fR-SzN"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstAttribute="bottom" secondItem="0xK-u1-FJM" secondAttribute="bottom" id="5KA-Hz-ZsD"/>
-                            <constraint firstItem="iSI-fR-SzN" firstAttribute="bottom" secondItem="7GH-P7-CkL" secondAttribute="bottom" constant="32" id="8t2-ef-Gew"/>
+                            <constraint firstAttribute="bottomMargin" secondItem="Wn5-EU-0Q8" secondAttribute="bottom" constant="32" id="61E-HC-uvX"/>
                             <constraint firstItem="0xK-u1-FJM" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="top" id="9nW-OZ-d5m"/>
                             <constraint firstAttribute="trailing" secondItem="0xK-u1-FJM" secondAttribute="trailing" id="Lpv-6C-40B"/>
                             <constraint firstItem="0xK-u1-FJM" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" id="Me3-8Q-Yi2"/>
-                            <constraint firstItem="7GH-P7-CkL" firstAttribute="centerX" secondItem="0xK-u1-FJM" secondAttribute="centerX" id="iax-C8-vpK"/>
+                            <constraint firstItem="Wn5-EU-0Q8" firstAttribute="centerX" secondItem="0xK-u1-FJM" secondAttribute="centerX" id="Ul1-NH-ubC"/>
                         </constraints>
                     </view>
                 </viewController>

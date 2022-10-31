@@ -9,10 +9,11 @@ import Foundation
 import UIKit
 
 protocol CustomAlertDelegate {
-    func scanButtonTapped()
+        func alertPresentation()
+    
 }
 
-class FavoriteViewController: UIViewController {
+class FavouriteAlertController: UIViewController {
     
     private lazy var alertView: UIView = {
         let view = UIView()

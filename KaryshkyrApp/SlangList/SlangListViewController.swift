@@ -15,14 +15,16 @@ protocol SlangListView: AnyObject {
     func updateSlangList()
 }
 
-class SlangListViewController: UIViewController {
-    var selectedIndex: IndexPath?
+class SlangListViewController: UIViewController, UIGestureRecognizerDelegate {
+    var selectedIndex: IndexPath = []
     
     private var presenter: SlangListPresenter!
     
-    let alert = FavoriteViewController()
+    let alert = FavouriteAlertController()
     
     let nc = NotificationCenter.default
+    
+    var lastContentOffset: CGFloat = 0
     
     private lazy var contentView: UIView = {
         let view = UIView()
@@ -45,6 +47,8 @@ class SlangListViewController: UIViewController {
         view.setImage(UIImage(named: "close"), for: .clear, state: .normal)
         view.setImage(UIImage(named: "search"), for: .search, state: .normal)
         view.delegate = self
+        view.searchTextField.delegate = self
+        view.searchTextField.addTarget(self, action: #selector(dismissKeyBoard), for: .editingChanged)
         return view
     }()
     
@@ -71,6 +75,7 @@ class SlangListViewController: UIViewController {
         let view = UILabel()
         view.text = "ДОБАВИТЬ СЛЭНГ"
         view.textColor = .white
+        view.font = UIFont(name: "Roboto-Light", size: 18)
         return view
     }()
     
@@ -90,28 +95,42 @@ class SlangListViewController: UIViewController {
             self.slangsTableView.reloadData()
         }
         
-        nc.addObserver(self, selector: #selector(userLoggedIn), name: Notification.Name("UserLoggedIn"), object: nil)
-        nc.addObserver(self, selector: #selector(dismissTest), name: Notification.Name("dismissed"), object: nil)
+        nc.addObserver(self, selector: #selector(reloadRow), name: Notification.Name("dis"), object: nil)
+        
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyBoard))
+        tap.delegate = self
+                //shouldReceiveTouch on UITableViewCellContentView
+        tap.cancelsTouchesInView = false
+        self.view.addGestureRecognizer(tap)
+        
+        
+
+       
        
     }
     
-    @objc func userLoggedIn() {
-        title = ""
-        scanButtonTapped()
-        let when = DispatchTime.now() + 3
-        DispatchQueue.main.asyncAfter(deadline: when){
-         
-         // alert.dismiss(animated: true, completion: nil)
-            self.alert.dismissAlert()
-            self.title = "Главный"
+    
+    @objc func reloadRow() {
+       
+//        let cell = slangsTableView.cellForRow(at: selectedIndex) as! SlangCell
+//                cell.descriptionImageView.image = UIImage(named: "chevron_right")
+//        slangsTableView.reloadRows(at: [selectedIndex], with: .automatic)
+//        print(selectedIndex)
+        view.endEditing(true)
+        if let test = slangsTableView.indexPathForSelectedRow {
+            let cell = slangsTableView.cellForRow(at: test) as! SlangCell
+            cell.descriptionImageView.image = UIImage(named: "chevron_right")
+            slangsTableView.reloadRows(at: [test], with: .automatic)
         }
     }
     
-    @objc func dismissTest() {
-        alert.dismissAlert()
+    @objc func dismissKeyBoard() {
+        if slangSearchBar.searchTextField.text!.count < 1 {
+            view.endEditing(true)
+        }
         
     }
-    
+   
     override func viewWillAppear(_ animated: Bool) {
         self.navigationItem.hidesBackButton = true
     }
@@ -183,6 +202,8 @@ extension SlangListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
        // return presenter.result.results.count
         return presenter.filteredResults.count
+        
+        
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -196,14 +217,14 @@ extension SlangListViewController: UITableViewDataSource {
         //cell.slangLabel.text = presenter.result.results[indexPath.row].title
         
         cell.slangLabel.text = presenter.filteredResults[indexPath.row].title
-        
-        if selectedIndex == indexPath {
-            cell.backgroundColor = UIColor.white
-            cell.descriptionImageView.image = UIImage(named: "chevron_down")
-        } else {
-            cell.backgroundColor = UIColor.rgb(red: 246, green: 246, blue: 251)
-            cell.descriptionImageView.image = UIImage(named: "chevron_right")
-        }
+        cell.selectionStyle = .blue
+//        if selectedIndex == indexPath {
+//            cell.backgroundColor = UIColor.white
+//            cell.descriptionImageView.image = UIImage(named: "chevron_down")
+//        } else {
+//            cell.backgroundColor = UIColor.rgb(red: 246, green: 246, blue: 251)
+//            cell.descriptionImageView.image = UIImage(named: "chevron_right")
+//        }
         
         return cell
     }
@@ -222,21 +243,61 @@ extension SlangListViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        selectedIndex = indexPath
+       // selectedIndex = indexPath
         
-        tableView.reloadData()
-
+        let cell = slangsTableView.cellForRow(at: indexPath) as! SlangCell
+        cell.backgroundColor = .white
+        cell.descriptionImageView.image = UIImage(named: "chevron_down")
+        
         presenter.presentBottomSheet(at: indexPath.row)
     }
     
+    func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
+        let cell = slangsTableView.cellForRow(at: indexPath) as! SlangCell
+        cell.backgroundColor = UIColor.rgb(red: 246, green: 246, blue: 251)
+        cell.descriptionImageView.image = UIImage(named: "chevron_right")
+    }
+    
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        self.lastContentOffset = scrollView.contentOffset.y
+    }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if self.lastContentOffset < scrollView.contentOffset.y {
+            addSlangView.isHidden = true
+            } else {
+                addSlangView.isHidden = false
+            }
+        
+        let height = scrollView.frame.size.height
+            let contentYOffset = scrollView.contentOffset.y
+            let distanceFromBottom = scrollView.contentSize.height - contentYOffset
+
+            if distanceFromBottom < height {
+                addSlangView.isHidden = false
+            }
+    }
+    
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        addSlangView.isHidden = false
+    }
+    
+    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        addSlangView.isHidden = false
+    }
+    
+    func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+        addSlangView.isHidden = false
+    }
 //    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
 //        if (model.result.count - indexPath.row < 4) {
 //            //request for next page
 //        }
 //    }
+    
 }
 
-extension SlangListViewController: UISearchBarDelegate {
+extension SlangListViewController: UISearchBarDelegate, UITextFieldDelegate {
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
         searchBar.setImage(UIImage(), for: .search, state: .normal)
     }
@@ -244,12 +305,35 @@ extension SlangListViewController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         if searchText == "" {
             searchBar.setImage(UIImage(named: "search"), for: .search, state: .normal)
+            view.endEditing(true)
         } else {
             searchBar.setImage(UIImage(), for: .search, state: .normal)
         }
         
         presenter.searchSlang(text: searchText)
     }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        print("return ")
+        textField.resignFirstResponder()
+       
+        
+        return true
+    }
+    
+    func textFieldShouldClear(_ textField: UITextField) -> Bool {
+        print("clear tap")
+        textField.resignFirstResponder()
+       // view.endEditing(true)
+      
+        if textField.text?.count == 0 {
+            view.endEditing(true)
+        }
+        return true
+    }
+    
+    
+    
 
 }
 
@@ -274,23 +358,4 @@ extension SlangListViewController: SlangListView {
         slangsTableView.reloadData()
     }
 }
-
-extension SlangListViewController: CustomAlertDelegate {
-    func scanButtonTapped() {
-        //let alert = FavoriteViewController()
-        alert.delegate = self
-        alert.modalPresentationStyle = .overCurrentContext
-        alert.providesPresentationContextTransitionStyle = true
-        alert.definesPresentationContext = true
-        alert.modalTransitionStyle = .crossDissolve
-        present(alert, animated: true, completion: nil)
-        
-       
-    }
-    
-    
-    
-    
-}
-
 

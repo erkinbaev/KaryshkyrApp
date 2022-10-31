@@ -86,7 +86,8 @@ extension UIViewController {
         let titleLabel = UILabel()
         titleLabel.text = title
         titleLabel.frame = CGRect(x: 42, y: 0, width: 195, height: 25.78)
-        titleLabel.font = UIFont.systemFont(ofSize: 22)
+        titleLabel.font = UIFont(name: "Roboto-Light", size: 22)
+        titleLabel.textColor = .black
         view.addSubview(titleLabel)
         
         let menuBarButtonItem = UIBarButtonItem(customView: view)

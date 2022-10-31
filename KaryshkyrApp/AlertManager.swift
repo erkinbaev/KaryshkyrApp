@@ -17,8 +17,8 @@ class AlertManager {
 }
 
 extension UINavigationController: CustomAlertDelegate {
-    func scanButtonTapped() {
-        let alert = FavoriteViewController()
+    func alertPresentation() {
+        let alert = FavouriteAlertController()
         alert.delegate = self
         alert.modalPresentationStyle = .overCurrentContext
         alert.providesPresentationContextTransitionStyle = true

@@ -19,6 +19,8 @@ protocol SlangListPresenterDelegate: AnyObject {
     
     func searchSlang(text: String)
     
+    func getVerifiedSlangs()
+    
 }
 
 class SlangListPresenter : SlangListPresenterDelegate {
@@ -45,7 +47,7 @@ class SlangListPresenter : SlangListPresenterDelegate {
                     let test = try JSONDecoder().decode(WordsResponse.self, from: data!)
                     print(test)
                     self.result.results = test.results
-                    self.filteredResults = test.results
+                    self.getVerifiedSlangs()
                     print(test.results.count)
                     DispatchQueue.main.async {
                         completion()
@@ -57,6 +59,16 @@ class SlangListPresenter : SlangListPresenterDelegate {
            
         }.resume()
     }
+    
+    func getVerifiedSlangs() {
+        for i in result.results {
+            if i.is_verified {
+                filteredResults.append(i)
+            }
+        }
+    }
+    
+    
     
     func presentBottomSheet(at index: Int) {
         view.cellTap(at: index)

@@ -59,7 +59,8 @@ class SlangDescriptionViewController: UIViewController {
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        nc.post(name: Notification.Name("dismissed"), object: nil)
+        nc.post(name: Notification.Name("dis"), object: nil)
+        print("dismissed")
     }
     
     @objc func addToFavouritesTap() {
@@ -67,19 +68,17 @@ class SlangDescriptionViewController: UIViewController {
             addToFavouritesImageView.image = UIImage(named: "fav_fill")
             counter += 1
             
-            let favorites = realm.objects(Favourites.self).first
+           // let favorites = realm.objects(Favourites.self).first
             
             let slang = Slang()
             slang.title = slangTitleLabel.text!
             
-            
-            
             try! realm.write({
-                //realm.add(slang)
-                favorites?.favourites.insert(slang, at: 0)
+                realm.add(slang)
+                //favorites?.favourites.insert(slang, at: 0)
             })
             
-            nc.post(name: Notification.Name("UserLoggedIn"), object: nil)
+            nc.post(name: Notification.Name("addedToFavorites"), object: nil)
         } else {
             addToFavouritesImageView.image = UIImage(named: "fav")
             counter = 0
@@ -125,7 +124,9 @@ class SlangDescriptionViewController: UIViewController {
 
 class Slang: Object {
     @objc dynamic var title = ""
-    @objc dynamic var isSelected = false
 }
 
+class Favourites: Object {
+   let favourites = List<Slang>()
+}
 

@@ -21,7 +21,12 @@
 		CE54D278290678AD00CD45EA /* Roboto-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CE54D277290678AD00CD45EA /* Roboto-Bold.ttf */; };
 		CE54D27A290679B400CD45EA /* RobotoLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CE54D279290679B400CD45EA /* RobotoLight.ttf */; };
 		CE54D27C290679C600CD45EA /* Roboto-Thin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CE54D27B290679C600CD45EA /* Roboto-Thin.ttf */; };
-		CE54D27E29067FB800CD45EA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CE54D27D29067FB800CD45EA /* LaunchScreen.storyboard */; };
+		CE54D283290684E500CD45EA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CE54D282290684E500CD45EA /* LaunchScreen.storyboard */; };
+		CE54D2852906858200CD45EA /* launch.png in Resources */ = {isa = PBXBuildFile; fileRef = CE54D2842906858200CD45EA /* launch.png */; };
+		CE54D2872906971200CD45EA /* MainViewPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE54D2862906971200CD45EA /* MainViewPresenter.swift */; };
+		CE54D2A72907DF4200CD45EA /* Extension + UIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE54D2A62907DF4200CD45EA /* Extension + UIImage.swift */; };
+		CE54D2C929094B7B00CD45EA /* FavouritesPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE54D2C829094B7B00CD45EA /* FavouritesPresenter.swift */; };
+		CE54D2E2290BDA3A00CD45EA /* MultiBoxSelection.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE54D2E1290BDA3A00CD45EA /* MultiBoxSelection.swift */; };
 		CE7F11F228F9806A00D93C8D /* SlangsViewBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7F11F128F9806A00D93C8D /* SlangsViewBuilder.swift */; };
 		CE7F11F428F981C100D93C8D /* FavouritesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7F11F328F981C100D93C8D /* FavouritesViewController.swift */; };
 		CE7F125C28FC1D3700D93C8D /* Extension + ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7F125B28FC1D3700D93C8D /* Extension + ViewController.swift */; };
@@ -52,7 +57,12 @@
 		CE54D277290678AD00CD45EA /* Roboto-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Bold.ttf"; sourceTree = "<group>"; };
 		CE54D279290679B400CD45EA /* RobotoLight.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = RobotoLight.ttf; sourceTree = "<group>"; };
 		CE54D27B290679C600CD45EA /* Roboto-Thin.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Thin.ttf"; sourceTree = "<group>"; };
-		CE54D27D29067FB800CD45EA /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
+		CE54D282290684E500CD45EA /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
+		CE54D2842906858200CD45EA /* launch.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = launch.png; sourceTree = "<group>"; };
+		CE54D2862906971200CD45EA /* MainViewPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewPresenter.swift; sourceTree = "<group>"; };
+		CE54D2A62907DF4200CD45EA /* Extension + UIImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension + UIImage.swift"; sourceTree = "<group>"; };
+		CE54D2C829094B7B00CD45EA /* FavouritesPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavouritesPresenter.swift; sourceTree = "<group>"; };
+		CE54D2E1290BDA3A00CD45EA /* MultiBoxSelection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiBoxSelection.swift; sourceTree = "<group>"; };
 		CE7F11F128F9806A00D93C8D /* SlangsViewBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlangsViewBuilder.swift; sourceTree = "<group>"; };
 		CE7F11F328F981C100D93C8D /* FavouritesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavouritesViewController.swift; sourceTree = "<group>"; };
 		CE7F125B28FC1D3700D93C8D /* Extension + ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension + ViewController.swift"; sourceTree = "<group>"; };
@@ -114,6 +124,9 @@
 		CE285E2F28F9558E0040BE6E /* KaryshkyrApp */ = {
 			isa = PBXGroup;
 			children = (
+				CE54D2A52907DF1A00CD45EA /* SupportFiles */,
+				CE7F125F28FD698A00D93C8D /* SlangDescriptionViewController.swift */,
+				CE54D24C2903F38900CD45EA /* FavouriteAlertView.swift */,
 				CE54D2742906787400CD45EA /* Fonts */,
 				CEB5877129029B80004A6AD2 /* SlangList */,
 				CEB5870928FEA4D7004A6AD2 /* AddSlang */,
@@ -122,11 +135,10 @@
 				CE285E3028F9558E0040BE6E /* AppDelegate.swift */,
 				CE285E3228F9558E0040BE6E /* SceneDelegate.swift */,
 				CE285E3628F9558E0040BE6E /* Main.storyboard */,
-				CE54D27D29067FB800CD45EA /* LaunchScreen.storyboard */,
+				CE54D282290684E500CD45EA /* LaunchScreen.storyboard */,
 				CE285E3928F955910040BE6E /* Assets.xcassets */,
 				CE285E3E28F955910040BE6E /* Info.plist */,
 				CE7F125B28FC1D3700D93C8D /* Extension + ViewController.swift */,
-				CEB5871028FFEE31004A6AD2 /* MainViewController.swift */,
 				CE54D24E2904075700CD45EA /* AlertManager.swift */,
 				CE54D2722906737600CD45EA /* SplashViewController.swift */,
 			);
@@ -140,14 +152,25 @@
 				CE54D279290679B400CD45EA /* RobotoLight.ttf */,
 				CE54D2752906788D00CD45EA /* Roboto-Black.ttf */,
 				CE54D277290678AD00CD45EA /* Roboto-Bold.ttf */,
+				CE54D2842906858200CD45EA /* launch.png */,
 			);
 			path = Fonts;
+			sourceTree = "<group>";
+		};
+		CE54D2A52907DF1A00CD45EA /* SupportFiles */ = {
+			isa = PBXGroup;
+			children = (
+				CE54D2A62907DF4200CD45EA /* Extension + UIImage.swift */,
+			);
+			path = SupportFiles;
 			sourceTree = "<group>";
 		};
 		CEB5870728FEA4BB004A6AD2 /* Favourites */ = {
 			isa = PBXGroup;
 			children = (
 				CE7F11F328F981C100D93C8D /* FavouritesViewController.swift */,
+				CE54D2C829094B7B00CD45EA /* FavouritesPresenter.swift */,
+				CE54D2E1290BDA3A00CD45EA /* MultiBoxSelection.swift */,
 			);
 			path = Favourites;
 			sourceTree = "<group>";
@@ -155,8 +178,8 @@
 		CEB5870828FEA4C8004A6AD2 /* Main */ = {
 			isa = PBXGroup;
 			children = (
-				CE7F125F28FD698A00D93C8D /* SlangDescriptionViewController.swift */,
-				CE54D24C2903F38900CD45EA /* FavouriteAlertView.swift */,
+				CEB5871028FFEE31004A6AD2 /* MainViewController.swift */,
+				CE54D2862906971200CD45EA /* MainViewPresenter.swift */,
 			);
 			path = Main;
 			sourceTree = "<group>";
@@ -246,8 +269,9 @@
 				CE54D27A290679B400CD45EA /* RobotoLight.ttf in Resources */,
 				CE285E3A28F955910040BE6E /* Assets.xcassets in Resources */,
 				CE54D278290678AD00CD45EA /* Roboto-Bold.ttf in Resources */,
-				CE54D27E29067FB800CD45EA /* LaunchScreen.storyboard in Resources */,
+				CE54D283290684E500CD45EA /* LaunchScreen.storyboard in Resources */,
 				CE285E3828F9558E0040BE6E /* Main.storyboard in Resources */,
+				CE54D2852906858200CD45EA /* launch.png in Resources */,
 				CE54D2762906788D00CD45EA /* Roboto-Black.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -309,14 +333,18 @@
 				CE285E3528F9558E0040BE6E /* SlangListViewController.swift in Sources */,
 				CEB5877329029BD7004A6AD2 /* SlangListPresenter.swift in Sources */,
 				CE285E3128F9558E0040BE6E /* AppDelegate.swift in Sources */,
+				CE54D2E2290BDA3A00CD45EA /* MultiBoxSelection.swift in Sources */,
 				CE7F125E28FC224500D93C8D /* SlangAddViewController.swift in Sources */,
+				CE54D2A72907DF4200CD45EA /* Extension + UIImage.swift in Sources */,
 				CE285E3328F9558E0040BE6E /* SceneDelegate.swift in Sources */,
 				CE54D24D2903F38900CD45EA /* FavouriteAlertView.swift in Sources */,
 				CEB5870B28FEA639004A6AD2 /* SlangAddPresenter.swift in Sources */,
 				CE7F11F228F9806A00D93C8D /* SlangsViewBuilder.swift in Sources */,
 				CE7F126028FD698A00D93C8D /* SlangDescriptionViewController.swift in Sources */,
+				CE54D2872906971200CD45EA /* MainViewPresenter.swift in Sources */,
 				CE285E4528F9621A0040BE6E /* SlangCell.swift in Sources */,
 				CE54D2732906737600CD45EA /* SplashViewController.swift in Sources */,
+				CE54D2C929094B7B00CD45EA /* FavouritesPresenter.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

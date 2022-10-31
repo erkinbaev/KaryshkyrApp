@@ -16,9 +16,6 @@ class SlangAddViewController: UIViewController {
     
     private var presenter: SlangAddPresenter!
     
- 
-    
-    
     var isTitleEmpty: Bool = true
     
     var isDescriptionEmpty: Bool = true
@@ -32,6 +29,8 @@ class SlangAddViewController: UIViewController {
     private lazy var enterTitleLabel: UILabel = {
         let view = UILabel()
         view.text = "Введите слово:"
+        view.font = UIFont(name: "Roboto-Light", size: 12)
+        view.textColor = .black
         return view
     }()
     
@@ -44,6 +43,7 @@ class SlangAddViewController: UIViewController {
     
     private lazy var slangTitleTextField: UITextField = {
         let view = UITextField()
+        view.font = UIFont(name: "Roboto-Light", size: 16)
         view.addTarget(self, action: #selector(editingTitleTextField), for: .editingChanged)
         return view
     }()
@@ -63,6 +63,8 @@ class SlangAddViewController: UIViewController {
     private lazy var enterDescriptionLabel: UILabel = {
         let view = UILabel()
         view.text = "Введите пояснение:"
+        view.textColor = .black
+        view.font = UIFont(name: "Roboto-Light", size: 12)
         return view
     }()
     
@@ -76,6 +78,8 @@ class SlangAddViewController: UIViewController {
     private lazy var slangDescriptionTextView: UITextView = {
         let view = UITextView()
         view.backgroundColor = UIColor.rgb(red: 246, green: 246, blue: 251)
+        view.font = UIFont(name: "Roboto-Light", size: 16)
+        view.textColor = .black
         view.delegate = self
         return view
     }()
@@ -103,11 +107,14 @@ class SlangAddViewController: UIViewController {
     private lazy var enterContactLabel: UILabel = {
         let view = UILabel()
         view.text = "Введите контактные данные:"
+        view.font = UIFont(name: "Roboto-Light", size: 12)
+        view.textColor = .black
         return view
     }()
     
     private lazy var contactTextField: UITextField = {
         let view = UITextField()
+        view.font = UIFont(name: "Roboto-Light", size: 16)
         return view
     }()
     
@@ -138,8 +145,7 @@ class SlangAddViewController: UIViewController {
         presenter = SlangAddPresenter(view: self)
         let tap = UITapGestureRecognizer(target: self, action: #selector(UIInputViewController.dismissKeyboard))
 
-            //Uncomment the line below if you want the tap not not interfere and cancel other interactions.
-            //tap.cancelsTouchesInView = false
+           
 
         view.addGestureRecognizer(tap)
     }

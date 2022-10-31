@@ -9,21 +9,25 @@ import Foundation
 import UIKit
 import RealmSwift
 
+protocol FavouritesView: AnyObject {
+    func reloadTableView()
+    
+    func editTableView(selectedIndexs: [IndexPath])
+}
+
 class FavouritesViewController: UIViewController {
     
-    let nc = NotificationCenter.default
+//    var image: String = "chevron_right"
+//
+//    var isEnabled: Bool = false
+//
+//    let realm = try! Realm()
+//
+//    var slangs: Results<Slang>?
+//
+//    var counter = 0
     
-    var image: String = "chevron_right"
-    
-    let realm = try! Realm()
-    
-    var slangs: Results<Slang>?
-    
-    var colors = Colors()
-    
-    var selectedCells: [IndexPath] = []
-    
-    var counter = 0
+    private var presenter: FavouritesPresenter!
     
     private lazy var contentView: UIView = {
         let view = UIView()
@@ -56,24 +60,18 @@ class FavouritesViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.presenter = FavouritesPresenter(view: self)
         view.backgroundColor = .white
         setupSubviews()
-        slangs = realm.objects(Slang.self)
-        nc.addObserver(self, selector: #selector(deleteRows), name: Notification.Name("delete"), object: nil)
+        presenter.getFavourites()
+        presenter.fillTableView()
+        presenter.observeEditingActions()
+        
+       // slangs = realm.objects(Slang.self)
+       // print(slangs!)
     }
     
-    @objc func deleteRows() {
-        for i in selectedCells {
-                try! realm.write({
-                        realm.delete(slangs![i.row])
-                        favouritesTableView.reloadData()
-                })
-        }
-        //favouritesTableView.deleteRows(at: [selectedCells], with: .automatic)
-        favouritesTableView.deleteRows(at: selectedCells, with: .automatic)
-        favouritesTableView.reloadData()
-    }
-    
+   
     
     func setupSubviews() {
         
@@ -102,17 +100,17 @@ class FavouritesViewController: UIViewController {
 
 extension FavouritesViewController: UITableViewDataSource {
     
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
-    }
-    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if slangs?.count != 0 {
-            return slangs?.count ?? 0
+
+//        if presenter.slangs?.count != 0 {
+//            return presenter.slangs?.count ?? 0
+//        }
+//       return 0
+        
+        if presenter.reversedFavourites.count != 0 {
+            return presenter.reversedFavourites.count
         }
         return 0
-        
-       
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -123,8 +121,11 @@ extension FavouritesViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "test_cell", for: indexPath) as! SlangCell
-        cell.slangLabel.text = slangs?[indexPath.row].title
-        cell.descriptionImageView.image = UIImage(named: image)
+        //cell.slangLabel.text = presenter.slangs?.reversed()[indexPath.row].title
+        cell.slangLabel.text = presenter.reversedFavourites[indexPath.row]
+        cell.descriptionImageView.image = UIImage(named: presenter.image)
+        cell.descriptionImageView.isUserInteractionEnabled = presenter.isEnabled
+        cell.currentIndexPath = indexPath
         return cell
     }
 
@@ -134,30 +135,28 @@ extension FavouritesViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 64
     }
-    
-    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        return false
-    }
-    
+ 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        selectedCells.append(indexPath)
+        
     }
     
-    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-//        if editingStyle == .delete {
-//            for i in selectedCells {
-//                try! realm.write({
-//                    realm.delete(slangs![i.row])
-//                    favouritesTableView.reloadData()
-//                })
-//            }
-//            tableView.deleteRows(at: selectedCells, with: .automatic)
-//        }
+    func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
+        
+    }
+    
+    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
+        return UITableViewCell.EditingStyle(rawValue: 3) ?? .delete
     }
 }
 
-class Favourites: Object {
-   let favourites = List<Slang>()
+extension FavouritesViewController: FavouritesView {
+    func reloadTableView() {
+        favouritesTableView.reloadData()
+    }
+    
+    func editTableView(selectedIndexs: [IndexPath]) {
+        favouritesTableView.beginUpdates()
+        favouritesTableView.deleteRows(at: selectedIndexs, with: .automatic)
+        favouritesTableView.endUpdates()
+    }
 }
-
-
