@@ -246,7 +246,7 @@ extension SlangListViewController: UITableViewDelegate {
        // selectedIndex = indexPath
         
         let cell = slangsTableView.cellForRow(at: indexPath) as! SlangCell
-        cell.backgroundColor = .white
+        cell.contentView.backgroundColor = .white
         cell.descriptionImageView.image = UIImage(named: "chevron_down")
         
         presenter.presentBottomSheet(at: indexPath.row)
@@ -331,10 +331,6 @@ extension SlangListViewController: UISearchBarDelegate, UITextFieldDelegate {
         }
         return true
     }
-    
-    
-    
-
 }
 
 extension SlangListViewController: SlangListView {

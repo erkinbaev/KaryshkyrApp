@@ -45,7 +45,7 @@ class SlangCell: UITableViewCell {
         super.setSelected(selected, animated: animated)
 
              if selected {
-                 contentView.backgroundColor = UIColor.white
+                 //contentView.backgroundColor = UIColor.white
              } else {
                  contentView.backgroundColor = UIColor.rgb(red: 246, green: 246, blue: 251)
              }

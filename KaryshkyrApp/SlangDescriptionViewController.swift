@@ -60,6 +60,7 @@ class SlangDescriptionViewController: UIViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         nc.post(name: Notification.Name("dis"), object: nil)
+        nc.post(name: Notification.Name("dis2"), object: nil)
         print("dismissed")
     }
     

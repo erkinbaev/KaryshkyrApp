@@ -45,12 +45,29 @@ class SlangAddViewController: UIViewController {
         let view = UITextField()
         view.font = UIFont(name: "Roboto-Light", size: 16)
         view.addTarget(self, action: #selector(editingTitleTextField), for: .editingChanged)
+        view.delegate = self
         return view
     }()
     
     private lazy var titleUnderline: UIView = {
         let view = UIView()
         view.backgroundColor = UIColor.rgb(red: 28, green: 27, blue: 31)
+        return view
+    }()
+    
+    private lazy var titleMinimumCharLabel: UILabel = {
+        let view = UILabel()
+        view.text = "Минимум 3 буквы"
+        view.textColor = .red
+        view.font = UIFont(name: "Roboto-Light", size: 12)
+        return view
+    }()
+    
+    private lazy var titleCharactersAmountLabel: UILabel = {
+        let view = UILabel()
+        view.text = "0/250"
+        view.textAlignment = .right
+        view.textColor = UIColor.rgb(red: 158, green: 158, blue: 155)
         return view
     }()
     
@@ -90,9 +107,17 @@ class SlangAddViewController: UIViewController {
         return view
     }()
     
+    private lazy var descriptionMinimumCharLabel: UILabel = {
+        let view = UILabel()
+        view.text = "Минимум 10 букв"
+        view.textColor = .red
+        view.font = UIFont(name: "Roboto-Light", size: 12)
+        return view
+    }()
+    
     private lazy var descriptionCharactersAmountLabel: UILabel = {
         let view = UILabel()
-        view.text = "0/1000"
+        view.text = "0/500"
         view.textAlignment = .right
         view.textColor = UIColor.rgb(red: 158, green: 158, blue: 155)
         return view
@@ -124,6 +149,14 @@ class SlangAddViewController: UIViewController {
         return view
     }()
     
+    private lazy var сontactMinimumCharLabel: UILabel = {
+        let view = UILabel()
+        view.text = "Не обязательное поле"
+        view.textColor = .black
+        view.font = UIFont(name: "Roboto-Light", size: 12)
+        return view
+    }()
+    
     private lazy var saveSlangButton: UIButton = {
         let view = UIButton(type: .system)
         view.setTitle("Добавить", for: .normal)
@@ -151,7 +184,7 @@ class SlangAddViewController: UIViewController {
     }
     
     @objc func editingTitleTextField() {
-        if slangTitleTextField.text == "" {
+        if slangTitleTextField.text == "" || slangTitleTextField.text!.count < 3{
             isTitleEmpty = false
         } else {
             isTitleEmpty = true
@@ -166,6 +199,8 @@ class SlangAddViewController: UIViewController {
             saveSlangButton.isEnabled = true
             saveSlangButton.backgroundColor = UIColor.rgb(red: 2, green: 126, blue: 216)
         }
+        
+        titleCharactersAmountLabel.text = "\(slangTitleTextField.text!.count)/250"
     }
     
     @objc func editingDescriptionTextFiedl() {
@@ -178,7 +213,18 @@ class SlangAddViewController: UIViewController {
     }
     
     @objc func saveSlangTap() {
-        presenter.postRequest(title: slangTitleTextField.text!, description: slangDescriptionTextView.text!, contact: contactTextField.text!, is_verified: false)
+        let alert = UIAlertController(title: "", message: "Сленг на рассмотрении, если сленг зыңк то мы его каңкретна добавим ежжи, если нет то не обисуй", preferredStyle: .alert)
+        
+        let okAction = UIAlertAction(title: "OK", style: .cancel) { action in
+            self.presenter.postRequest(title: self.slangTitleTextField.text!, description: self.slangDescriptionTextView.text!, contact: self.contactTextField.text!, is_verified: false)
+        }
+        
+        alert.addAction(okAction)
+        
+        present(alert, animated: true, completion: nil)
+        
+        
+        
     }
     
     @objc func backToMainTap() {
@@ -223,9 +269,21 @@ class SlangAddViewController: UIViewController {
         titleUnderline.bottomAnchor.constraint(equalTo: titleView.bottomAnchor, constant: 0).isActive = true
         titleUnderline.heightAnchor.constraint(equalToConstant: 1).isActive = true
         
+        view.addSubview(titleMinimumCharLabel)
+        titleMinimumCharLabel.translatesAutoresizingMaskIntoConstraints = false
+        titleMinimumCharLabel.topAnchor.constraint(equalTo: titleView.bottomAnchor, constant: 8).isActive = true
+        titleMinimumCharLabel.leftAnchor.constraint(equalTo: titleView.leftAnchor, constant: 21).isActive = true
+        titleMinimumCharLabel.heightAnchor.constraint(equalToConstant: 16).isActive = true
+        
+        view.addSubview(titleCharactersAmountLabel)
+        titleCharactersAmountLabel.translatesAutoresizingMaskIntoConstraints = false
+        titleCharactersAmountLabel.topAnchor.constraint(equalTo: titleView.bottomAnchor, constant: 8).isActive = true
+        titleCharactersAmountLabel.rightAnchor.constraint(equalTo: titleView.rightAnchor, constant: -21).isActive = true
+        titleCharactersAmountLabel.heightAnchor.constraint(equalToConstant: 16).isActive = true
+        
         view.addSubview(descriptionView)
         descriptionView.translatesAutoresizingMaskIntoConstraints = false
-        descriptionView.topAnchor.constraint(equalTo: titleView.bottomAnchor, constant: 24).isActive = true
+        descriptionView.topAnchor.constraint(equalTo: titleMinimumCharLabel.bottomAnchor, constant: 24).isActive = true
         descriptionView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 21).isActive = true
         descriptionView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -21).isActive = true
         descriptionView.heightAnchor.constraint(equalToConstant: 160).isActive = true
@@ -256,15 +314,21 @@ class SlangAddViewController: UIViewController {
         descriptionUnderline.bottomAnchor.constraint(equalTo: descriptionView.bottomAnchor, constant: 0).isActive = true
         descriptionUnderline.heightAnchor.constraint(equalToConstant: 1).isActive = true
         
+        view.addSubview(descriptionMinimumCharLabel)
+        descriptionMinimumCharLabel.translatesAutoresizingMaskIntoConstraints = false
+        descriptionMinimumCharLabel.topAnchor.constraint(equalTo: descriptionView.bottomAnchor, constant: 8).isActive = true
+        descriptionMinimumCharLabel.leftAnchor.constraint(equalTo: descriptionView.leftAnchor, constant: 21).isActive = true
+        descriptionMinimumCharLabel.heightAnchor.constraint(equalToConstant: 16).isActive = true
+        
         view.addSubview(descriptionCharactersAmountLabel)
         descriptionCharactersAmountLabel.translatesAutoresizingMaskIntoConstraints = false
         descriptionCharactersAmountLabel.topAnchor.constraint(equalTo: descriptionView.bottomAnchor, constant: 8).isActive = true
-        descriptionCharactersAmountLabel.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -21).isActive = true
+        descriptionCharactersAmountLabel.rightAnchor.constraint(equalTo: descriptionView.rightAnchor, constant: -21).isActive = true
         descriptionCharactersAmountLabel.heightAnchor.constraint(equalToConstant: 16).isActive = true
         
         view.addSubview(contactView)
         contactView.translatesAutoresizingMaskIntoConstraints = false
-        contactView.topAnchor.constraint(equalTo: descriptionView.bottomAnchor, constant: 40).isActive = true
+        contactView.topAnchor.constraint(equalTo: descriptionMinimumCharLabel.bottomAnchor, constant: 24).isActive = true
         contactView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 21).isActive = true
         contactView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -21).isActive = true
         contactView.heightAnchor.constraint(equalToConstant: 56).isActive = true
@@ -289,6 +353,12 @@ class SlangAddViewController: UIViewController {
         contactUnderline.bottomAnchor.constraint(equalTo: contactView.bottomAnchor, constant: 0).isActive = true
         contactUnderline.heightAnchor.constraint(equalToConstant: 1).isActive = true
         
+        view.addSubview(сontactMinimumCharLabel)
+        сontactMinimumCharLabel.translatesAutoresizingMaskIntoConstraints = false
+        сontactMinimumCharLabel.topAnchor.constraint(equalTo: contactView.bottomAnchor, constant: 8).isActive = true
+        сontactMinimumCharLabel.leftAnchor.constraint(equalTo: contactView.leftAnchor, constant: 21).isActive = true
+        сontactMinimumCharLabel.heightAnchor.constraint(equalToConstant: 16).isActive = true
+        
         view.addSubview(saveSlangButton)
         saveSlangButton.translatesAutoresizingMaskIntoConstraints = false
         saveSlangButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -34).isActive = true
@@ -299,10 +369,10 @@ class SlangAddViewController: UIViewController {
     
 }
 
-extension SlangAddViewController: SlangAddView, UITextViewDelegate {
+extension SlangAddViewController: SlangAddView, UITextViewDelegate, UITextFieldDelegate {
     
     func textViewDidChange(_ textView: UITextView) {
-        if textView.text == "" {
+        if textView.text == "" || textView.text.count < 3{
             isDescriptionEmpty = false
         } else {
             isDescriptionEmpty = true
@@ -318,7 +388,7 @@ extension SlangAddViewController: SlangAddView, UITextViewDelegate {
             saveSlangButton.backgroundColor = UIColor.rgb(red: 2, green: 126, blue: 216)
         }
         
-        descriptionCharactersAmountLabel.text = "\(textView.text.count)/1000"
+        descriptionCharactersAmountLabel.text = "\(textView.text.count)/500"
         
        
         print(isTitleEmpty)
@@ -329,6 +399,14 @@ extension SlangAddViewController: SlangAddView, UITextViewDelegate {
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         let newText = (textView.text as NSString).replacingCharacters(in: range, with: text)
         return newText.count <= 1000
+    }
+    
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        let maxLength = 250
+        let currentString = (textField.text ?? "") as NSString
+        let newString = currentString.replacingCharacters(in: range, with: string)
+
+        return newString.count <= maxLength
     }
 }
 

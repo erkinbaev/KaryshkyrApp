@@ -13,6 +13,10 @@ protocol FavouritesView: AnyObject {
     func reloadTableView()
     
     func editTableView(selectedIndexs: [IndexPath])
+    
+    func presentAlert(alert: UIAlertController)
+    
+    func cellTap(at index: Int)
 }
 
 class FavouritesViewController: UIViewController {
@@ -69,6 +73,15 @@ class FavouritesViewController: UIViewController {
         
        // slangs = realm.objects(Slang.self)
        // print(slangs!)
+        presenter.dismissDescriptionView(selector: #selector(reloadCell))
+    }
+    
+    @objc func reloadCell() {
+        if let test = favouritesTableView.indexPathForSelectedRow {
+            let cell = favouritesTableView.cellForRow(at: test) as! SlangCell
+            cell.descriptionImageView.image = UIImage(named: "chevron_right")
+            favouritesTableView.reloadRows(at: [test], with: .automatic)
+        }
     }
     
    
@@ -102,11 +115,6 @@ extension FavouritesViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 
-//        if presenter.slangs?.count != 0 {
-//            return presenter.slangs?.count ?? 0
-//        }
-//       return 0
-        
         if presenter.reversedFavourites.count != 0 {
             return presenter.reversedFavourites.count
         }
@@ -123,6 +131,9 @@ extension FavouritesViewController: UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: "test_cell", for: indexPath) as! SlangCell
         //cell.slangLabel.text = presenter.slangs?.reversed()[indexPath.row].title
         cell.slangLabel.text = presenter.reversedFavourites[indexPath.row]
+        if presenter.isEnabled == true {
+            cell.selectionStyle = .none
+        }
         cell.descriptionImageView.image = UIImage(named: presenter.image)
         cell.descriptionImageView.isUserInteractionEnabled = presenter.isEnabled
         cell.currentIndexPath = indexPath
@@ -137,6 +148,12 @@ extension FavouritesViewController: UITableViewDelegate {
     }
  
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if presenter.isEnabled != true {
+            let cell = favouritesTableView.cellForRow(at: indexPath) as! SlangCell
+            cell.contentView.backgroundColor = .white
+            cell.descriptionImageView.image = UIImage(named: "chevron_down")
+            cellTap(at: indexPath.row)
+        }
         
     }
     
@@ -159,4 +176,22 @@ extension FavouritesViewController: FavouritesView {
         favouritesTableView.deleteRows(at: selectedIndexs, with: .automatic)
         favouritesTableView.endUpdates()
     }
+    
+    func presentAlert(alert: UIAlertController) {
+        present(alert, animated: true, completion: nil)
+    }
+    
+    func cellTap(at index: Int) {
+        let slangDescriptionViewController = SlangDescriptionViewController()
+        if let sheet = slangDescriptionViewController.sheetPresentationController {
+            sheet.detents = [.medium()]
+            sheet.largestUndimmedDetentIdentifier = .none
+            
+        }
+        slangDescriptionViewController.slangTitleLabel.text = presenter.reversedFavourites[index]
+        //slangDescriptionViewController.slangDescriptionLabel.text = presenter.filteredResults[index].description
+        slangDescriptionViewController.addToFavouritesImageView.isHidden = true
+        present(slangDescriptionViewController, animated: true, completion: nil)
+    }
+    
 }

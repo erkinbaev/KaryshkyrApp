@@ -16,6 +16,8 @@ protocol FavouritesPresenterDelegate: AnyObject {
     func observeEditingActions()
     
     func removeFromFavourites()
+    
+    func dismissDescriptionView(selector: Selector)
 }
 
 
@@ -62,7 +64,34 @@ class FavouritesPresenter: FavouritesPresenterDelegate {
     @objc func stopEditing() {
         image = "chevron_right"
         isEnabled = false
-        removeFromFavourites()
+        
+        if multiBoxSelection.selectedIndexs.count > 0 {
+            let alert = UIAlertController(title: "Удаление!", message: "Ты уверен?", preferredStyle: .alert)
+            
+            let yesAction = UIAlertAction(title: "УВЕРЕН", style: .cancel) { action in
+                self.removeFromFavourites()
+            }
+            
+            let noAction = UIAlertAction(title: "НЕТ", style: .default) { action in
+                ()
+            }
+            
+            alert.addAction(yesAction)
+            alert.addAction(noAction)
+            
+            self.view.presentAlert(alert: alert)
+        } else {
+            let alert = UIAlertController(title: "Нечего удалять!", message: "Поставь сначала галочки.", preferredStyle: .alert)
+            
+            let yesAction = UIAlertAction(title: "ОК", style: .cancel) { action in
+                ()
+            }
+            alert.addAction(yesAction)
+            
+            self.view.presentAlert(alert: alert)
+        }
+        
+        
     }
     
     func removeFromFavourites() {
@@ -106,6 +135,10 @@ class FavouritesPresenter: FavouritesPresenterDelegate {
             favourites.append(slangs![i].title)
         }
         reversedFavourites = favourites.reversed()
+    }
+    
+    func dismissDescriptionView(selector: Selector) {
+        nc.addObserver(view.self!, selector: selector, name: Notification.Name("dis2"), object: nil)
     }
     
     
