@@ -148,8 +148,8 @@ extension MainViewController: MainView {
     }
     
     func observeFavouriteClick(notificationCenter: NotificationCenter) {
-        notificationCenter.addObserver(self, selector: #selector(presentAlert), name: Notification.Name("addedToFavorites"), object: nil)
-        notificationCenter.addObserver(self, selector: #selector(dismissAlert), name: Notification.Name("addedToFavorites"), object: nil)
+//        notificationCenter.addObserver(self, selector: #selector(presentAlert), name: Notification.Name("addedToFavorites"), object: nil)
+//        notificationCenter.addObserver(self, selector: #selector(dismissAlert), name: Notification.Name("addedToFavorites"), object: nil)
     }
     
     func presentViewController(viewController: UIViewController) {

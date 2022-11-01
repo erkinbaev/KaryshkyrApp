@@ -8,6 +8,7 @@
 import Foundation
 import UIKit
 import RealmSwift
+import Toast_Swift
 
 class SlangDescriptionViewController: UIViewController {
     
@@ -80,6 +81,8 @@ class SlangDescriptionViewController: UIViewController {
             })
             
             nc.post(name: Notification.Name("addedToFavorites"), object: nil)
+            self.view.makeToast("Добавлено в избранное", duration: 2.0, position: .bottom)
+            
         } else {
             addToFavouritesImageView.image = UIImage(named: "fav")
             counter = 0

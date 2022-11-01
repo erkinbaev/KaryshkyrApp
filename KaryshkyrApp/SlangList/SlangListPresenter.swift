@@ -32,7 +32,7 @@ class SlangListPresenter : SlangListPresenterDelegate {
     
     var filteredResults: [WordModel] = []
     
-    
+    var heightForNoResultsLabel: NSLayoutConstraint? = nil
     
     required init(view: SlangListView) {
         self.view = view
@@ -47,7 +47,7 @@ class SlangListPresenter : SlangListPresenterDelegate {
                     let test = try JSONDecoder().decode(WordsResponse.self, from: data!)
                     print(test)
                     self.result.results = test.results
-                    self.getVerifiedSlangs()
+                    //self.getVerifiedSlangs()
                     print(test.results.count)
                     DispatchQueue.main.async {
                         completion()
@@ -87,6 +87,7 @@ class SlangListPresenter : SlangListPresenterDelegate {
         
         if text == "" {
             filteredResults = self.result.results
+            self.heightForNoResultsLabel?.constant = 0
         }
         
         for slang in self.result.results {
@@ -94,6 +95,17 @@ class SlangListPresenter : SlangListPresenterDelegate {
                 filteredResults.append(slang)
             }
         }
+        
+        if filteredResults.count == 0 {
+            DispatchQueue.main.async {
+                self.heightForNoResultsLabel?.constant = 80
+            }
+        } else {
+            DispatchQueue.main.async {
+                self.heightForNoResultsLabel?.constant = 0
+            }
+        }
+        
         DispatchQueue.main.async {
             self.view.updateSlangList()
         }

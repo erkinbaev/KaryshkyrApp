@@ -8,6 +8,7 @@
 import Foundation
 import UIKit
 import RealmSwift
+import Toast_Swift
 
 protocol FavouritesView: AnyObject {
     func reloadTableView()
@@ -17,6 +18,8 @@ protocol FavouritesView: AnyObject {
     func presentAlert(alert: UIAlertController)
     
     func cellTap(at index: Int)
+    
+    func showToast()
 }
 
 class FavouritesViewController: UIViewController {
@@ -192,6 +195,10 @@ extension FavouritesViewController: FavouritesView {
         //slangDescriptionViewController.slangDescriptionLabel.text = presenter.filteredResults[index].description
         slangDescriptionViewController.addToFavouritesImageView.isHidden = true
         present(slangDescriptionViewController, animated: true, completion: nil)
+    }
+    
+    func showToast() {
+        self.view.makeToast("Cленги удалены", duration: 2.0, position: .top)
     }
     
 }

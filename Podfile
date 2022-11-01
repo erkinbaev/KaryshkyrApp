@@ -7,4 +7,5 @@ target 'KaryshkyrApp' do
 
   # Pods for KaryshkyrApp
 	pod 'RealmSwift'
+	pod 'Toast-Swift'
 end

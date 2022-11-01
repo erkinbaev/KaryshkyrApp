@@ -11,9 +11,6 @@ import UIKit
 class AlertManager {
     let nc = NotificationCenter.default
 
-    
-    
-    
 }
 
 extension UINavigationController: CustomAlertDelegate {

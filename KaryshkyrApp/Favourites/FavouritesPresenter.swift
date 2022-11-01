@@ -126,7 +126,7 @@ class FavouritesPresenter: FavouritesPresenterDelegate {
         
         view.reloadTableView()
         
-        
+        view.showToast()
         
     }
     
@@ -138,7 +138,7 @@ class FavouritesPresenter: FavouritesPresenterDelegate {
     }
     
     func dismissDescriptionView(selector: Selector) {
-        nc.addObserver(view.self!, selector: selector, name: Notification.Name("dis2"), object: nil)
+        nc.addObserver(view.self, selector: selector, name: Notification.Name("dis2"), object: nil)
     }
     
     

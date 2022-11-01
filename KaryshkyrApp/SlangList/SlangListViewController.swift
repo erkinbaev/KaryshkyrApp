@@ -52,6 +52,13 @@ class SlangListViewController: UIViewController, UIGestureRecognizerDelegate {
         return view
     }()
     
+    private lazy var noSlangsLabel: UILabel = {
+        let view = UILabel()
+        view.text = "По запросу ничего не найдено"
+        view.font = UIFont(name: "Roboto-Light", size: 16)
+        return view
+    }()
+    
     lazy var slangsTableView: UITableView = {
         let view = UITableView()
         view.register(SlangCell.self, forCellReuseIdentifier: "slang_cell")
@@ -87,11 +94,11 @@ class SlangListViewController: UIViewController, UIGestureRecognizerDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        setupSubviews()
         self.presenter = SlangListPresenter(view: self)
-        
+        presenter.heightForNoResultsLabel?.constant = 0
+        setupSubviews()
         presenter.retrieve {
+            self.presenter.getVerifiedSlangs()
             self.slangsTableView.reloadData()
         }
         
@@ -156,9 +163,18 @@ class SlangListViewController: UIViewController, UIGestureRecognizerDelegate {
         slangSearchBar.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -21).isActive = true
         slangSearchBar.heightAnchor.constraint(equalToConstant: 48).isActive = true
         
+        contentView.addSubview(noSlangsLabel)
+        noSlangsLabel.translatesAutoresizingMaskIntoConstraints = false
+        noSlangsLabel.topAnchor.constraint(equalTo: slangSearchBar.bottomAnchor, constant: 20).isActive = true
+        noSlangsLabel.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 28).isActive = true
+        noSlangsLabel.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: 0).isActive = true
+        presenter.heightForNoResultsLabel = noSlangsLabel.heightAnchor.constraint(equalToConstant: 0)
+        presenter.heightForNoResultsLabel?.isActive = true
+        
+        
         contentView.addSubview(slangsTableView)
         slangsTableView.translatesAutoresizingMaskIntoConstraints = false
-        slangsTableView.topAnchor.constraint(equalTo: slangSearchBar.bottomAnchor, constant: 0).isActive = true
+        slangsTableView.topAnchor.constraint(equalTo: noSlangsLabel.bottomAnchor, constant: 0).isActive = true
         slangsTableView.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 0).isActive = true
         slangsTableView.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: 0).isActive = true
         slangsTableView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: 0).isActive = true
