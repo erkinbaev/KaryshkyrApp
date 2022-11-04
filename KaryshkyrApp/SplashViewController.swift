@@ -51,7 +51,7 @@ class SplashViewController: UIViewController {
         view.addSubview(brandLabel)
         brandLabel.translatesAutoresizingMaskIntoConstraints = false
         brandLabel.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -32).isActive = true
-        brandLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: 0).isActive = true
+        brandLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: 2.4).isActive = true
         brandLabel.heightAnchor.constraint(equalToConstant: 22).isActive = true
         brandLabel.widthAnchor.constraint(equalToConstant: 165).isActive = true
     }

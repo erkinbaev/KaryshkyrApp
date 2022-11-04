@@ -44,6 +44,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let splashViewController = SplashViewController()
         let navViewController = UINavigationController(rootViewController: splashViewController)
         window.rootViewController = navViewController
+        window.overrideUserInterfaceStyle = .light
         window.backgroundColor = .white
         window.makeKeyAndVisible()
         self.window = window

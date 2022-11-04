@@ -32,6 +32,8 @@ class SlangListPresenter : SlangListPresenterDelegate {
     
     var filteredResults: [WordModel] = []
     
+    var data: [WordModel] = []
+    
     var heightForNoResultsLabel: NSLayoutConstraint? = nil
     
     required init(view: SlangListView) {
@@ -64,6 +66,7 @@ class SlangListPresenter : SlangListPresenterDelegate {
         for i in result.results {
             if i.is_verified {
                 filteredResults.append(i)
+                data.append(i)
             }
         }
     }
@@ -86,7 +89,7 @@ class SlangListPresenter : SlangListPresenterDelegate {
         filteredResults = []
         
         if text == "" {
-            filteredResults = self.result.results
+            filteredResults = data
             self.heightForNoResultsLabel?.constant = 0
         }
         

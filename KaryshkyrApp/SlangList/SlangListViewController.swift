@@ -56,6 +56,7 @@ class SlangListViewController: UIViewController, UIGestureRecognizerDelegate {
         let view = UILabel()
         view.text = "По запросу ничего не найдено"
         view.font = UIFont(name: "Roboto-Light", size: 16)
+        view.textColor = .black
         return view
     }()
     

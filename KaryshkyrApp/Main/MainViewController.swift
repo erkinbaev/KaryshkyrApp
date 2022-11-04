@@ -46,6 +46,8 @@ class MainViewController: UITabBarController {
         setupSubviews()
         self.presenter = MainViewPresenter(view: self)
         presenter.observeAlertActions()
+        
+        
     }
     
     override func viewWillLayoutSubviews() {
@@ -55,6 +57,11 @@ class MainViewController: UITabBarController {
     func setupSubviews() {
         title = "Главный"
         self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: UIFont(name: "Roboto-Light", size: 22)!]
+        
+        
+       
+        
+        
         
         slangListViewController.tabBarItem.image = UIImage(named: "list_text")
         favouritesViewController.tabBarItem.image = UIImage(named: "fav_text")
@@ -103,10 +110,12 @@ extension MainViewController: UITabBarControllerDelegate {
     func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
         if viewController == favouritesViewController {
             presenter.updateRightBarOnFavourites()
-          
+            favouritesViewController.test()
+            favouritesViewController.favouritesTableView.reloadData()
+            
         } else {
             presenter.updateRightBarOnSlangList()
-           
+            slangListViewController.slangsTableView.reloadData()
         }
     }
 }
@@ -126,7 +135,7 @@ extension MainViewController: MainView {
 //        favouritesViewController.image = "chevron_right"
 //        favouritesViewController.isEnabled = false
         presenter.nc.post(name: Notification.Name("stop_edit"), object: nil)
-        favouritesViewController.favouritesTableView.reloadData()
+        //favouritesViewController.favouritesTableView.reloadData()
         let editBarButton = createCustomBarButton(image: "edit", selector: #selector(tapRightBarItem))
         navigationItem.rightBarButtonItem = editBarButton
     }

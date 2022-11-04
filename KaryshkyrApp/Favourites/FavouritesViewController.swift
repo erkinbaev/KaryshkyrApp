@@ -20,6 +20,10 @@ protocol FavouritesView: AnyObject {
     func cellTap(at index: Int)
     
     func showToast()
+    
+    func selectRows() -> UITableView
+    
+    func removeData()
 }
 
 class FavouritesViewController: UIViewController {
@@ -46,6 +50,7 @@ class FavouritesViewController: UIViewController {
         let view = UILabel()
         view.text = "Вот твои любимые слова"
         view.font = UIFont.systemFont(ofSize: 20)
+        view.textColor = .black
         return view
     }()
    
@@ -55,6 +60,7 @@ class FavouritesViewController: UIViewController {
         view.delegate = self
         view.dataSource = self
         view.register(SlangCell.self, forCellReuseIdentifier: "test_cell")
+        view.allowsMultipleSelection = true
         return view
     }()
     
@@ -68,15 +74,25 @@ class FavouritesViewController: UIViewController {
         super.viewDidLoad()
         
         self.presenter = FavouritesPresenter(view: self)
-        view.backgroundColor = .white
+        //view.backgroundColor = .white
         setupSubviews()
-        presenter.getFavourites()
-        presenter.fillTableView()
+        
+        test()
         presenter.observeEditingActions()
         
        // slangs = realm.objects(Slang.self)
        // print(slangs!)
         presenter.dismissDescriptionView(selector: #selector(reloadCell))
+        
+        
+    }
+    
+    func test(){
+        presenter.favourites.removeAll()
+        presenter.reversedFavourites.removeAll()
+        presenter.getFavourites()
+        presenter.fillTableView()
+        favouritesTableView.reloadData()
     }
     
     @objc func reloadCell() {
@@ -90,6 +106,8 @@ class FavouritesViewController: UIViewController {
    
     
     func setupSubviews() {
+        
+        
         
         view.addSubview(contentView)
         contentView.translatesAutoresizingMaskIntoConstraints = false
@@ -133,13 +151,13 @@ extension FavouritesViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "test_cell", for: indexPath) as! SlangCell
         //cell.slangLabel.text = presenter.slangs?.reversed()[indexPath.row].title
-        cell.slangLabel.text = presenter.reversedFavourites[indexPath.row]
+        cell.slangLabel.text = presenter.reversedFavourites[indexPath.row].title
         if presenter.isEnabled == true {
             cell.selectionStyle = .none
         }
         cell.descriptionImageView.image = UIImage(named: presenter.image)
         cell.descriptionImageView.isUserInteractionEnabled = presenter.isEnabled
-        cell.currentIndexPath = indexPath
+       // cell.currentIndexPath = indexPath
         return cell
     }
 
@@ -151,17 +169,22 @@ extension FavouritesViewController: UITableViewDelegate {
     }
  
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        print(favouritesTableView.indexPathsForSelectedRows!)
+        
+        let cell = favouritesTableView.cellForRow(at: indexPath) as! SlangCell
         if presenter.isEnabled != true {
-            let cell = favouritesTableView.cellForRow(at: indexPath) as! SlangCell
             cell.contentView.backgroundColor = .white
             cell.descriptionImageView.image = UIImage(named: "chevron_down")
             cellTap(at: indexPath.row)
+        } else {
+            cell.descriptionImageView.image = UIImage(named: "checkmark")
         }
         
     }
     
     func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
-        
+        let cell = favouritesTableView.cellForRow(at: indexPath) as! SlangCell
+        cell.descriptionImageView.image = UIImage(named: "box")
     }
     
     func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
@@ -191,14 +214,52 @@ extension FavouritesViewController: FavouritesView {
             sheet.largestUndimmedDetentIdentifier = .none
             
         }
-        slangDescriptionViewController.slangTitleLabel.text = presenter.reversedFavourites[index]
-        //slangDescriptionViewController.slangDescriptionLabel.text = presenter.filteredResults[index].description
+        slangDescriptionViewController.slangTitleLabel.text = presenter.reversedFavourites[index].title
+        slangDescriptionViewController.slangDescriptionLabel.text = presenter.reversedFavourites[index].description
+        print(presenter.reversedFavourites[index].description)
         slangDescriptionViewController.addToFavouritesImageView.isHidden = true
         present(slangDescriptionViewController, animated: true, completion: nil)
     }
     
     func showToast() {
-        self.view.makeToast("Cленги удалены", duration: 2.0, position: .top)
+        self.view.makeToast("Cленги удалены", duration: 2.0, position: .bottom)
+    }
+    
+    func selectRows() -> UITableView {
+        return favouritesTableView
+    }
+    
+    func removeData() {
+        if let selectedRows = favouritesTableView.indexPathsForSelectedRows {
+                   // 1
+                    
+                   var items = [FavouriteModel]()
+                   for indexPath in selectedRows  {
+                       items.append(presenter.reversedFavourites[indexPath.row])
+                       let slang = Slang()
+                       slang.title = presenter.reversedFavourites[indexPath.row].title
+                       slang.slangDescription = presenter.reversedFavourites[indexPath.row].description
+                       presenter.slangsToRemove.append(slang)
+                   }
+                   // 2
+                   for item in items {
+                       if let index = presenter.reversedFavourites.firstIndex(of: item) {
+                           presenter.reversedFavourites.remove(at: index)
+                       }
+                   }
+                   // 3
+            presenter.removeFromData()
+
+        favouritesTableView.beginUpdates()
+            
+            favouritesTableView.deleteRows(at: selectedRows, with: .fade)
+        favouritesTableView.endUpdates()
+        favouritesTableView.reloadData()
+            
+        showToast()
+        } else {
+            
+        }
     }
     
 }

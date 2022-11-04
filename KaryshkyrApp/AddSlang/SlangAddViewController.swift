@@ -57,7 +57,7 @@ class SlangAddViewController: UIViewController {
     
     private lazy var titleMinimumCharLabel: UILabel = {
         let view = UILabel()
-        view.text = "Минимум 3 буквы"
+        view.text = "Минимум 2 буквы"
         view.textColor = .red
         view.font = UIFont(name: "Roboto-Light", size: 12)
         return view
@@ -140,6 +140,7 @@ class SlangAddViewController: UIViewController {
     private lazy var contactTextField: UITextField = {
         let view = UITextField()
         view.font = UIFont(name: "Roboto-Light", size: 16)
+        view.textColor = .black
         return view
     }()
     
@@ -151,7 +152,7 @@ class SlangAddViewController: UIViewController {
     
     private lazy var сontactMinimumCharLabel: UILabel = {
         let view = UILabel()
-        view.text = "Не обязательное поле"
+        view.text = "Необязательное поле"
         view.textColor = .black
         view.font = UIFont(name: "Roboto-Light", size: 12)
         return view
@@ -184,15 +185,15 @@ class SlangAddViewController: UIViewController {
     }
     
     @objc func editingTitleTextField() {
-        if slangTitleTextField.text == "" || slangTitleTextField.text!.count < 3{
-            isTitleEmpty = false
-        } else {
+        if slangTitleTextField.text == "" || slangTitleTextField.text!.count <= 1{
             isTitleEmpty = true
+        } else {
+            isTitleEmpty = false
         }
-        if isTitleEmpty == false && isDescriptionEmpty == false {
+        if isTitleEmpty == true && isDescriptionEmpty == true {
             saveSlangButton.isEnabled = false
             saveSlangButton.backgroundColor = UIColor.rgb(red: 218, green: 218, blue: 218)
-        } else if isTitleEmpty == true && isDescriptionEmpty == false || isTitleEmpty == false && isDescriptionEmpty == true {
+        } else if isTitleEmpty == false && isDescriptionEmpty == true || isTitleEmpty == true && isDescriptionEmpty == false {
             saveSlangButton.isEnabled = false
             saveSlangButton.backgroundColor = UIColor.rgb(red: 218, green: 218, blue: 218)
         } else {
@@ -208,22 +209,22 @@ class SlangAddViewController: UIViewController {
     }
     
     @objc func dismissKeyboard() {
-        //Causes the view (or one of its embedded text fields) to resign the first responder status.
         view.endEditing(true)
     }
     
     @objc func saveSlangTap() {
+        self.presenter.postRequest(title: self.slangTitleTextField.text!, description: self.slangDescriptionTextView.text!, contact: self.contactTextField.text!, is_verified: false)
         let alert = UIAlertController(title: "", message: "Сленг на рассмотрении, если сленг зыңк то мы его каңкретна добавим ежжи, если нет то не обисуй", preferredStyle: .alert)
         
         let okAction = UIAlertAction(title: "OK", style: .cancel) { action in
-            self.presenter.postRequest(title: self.slangTitleTextField.text!, description: self.slangDescriptionTextView.text!, contact: self.contactTextField.text!, is_verified: false)
+            self.slangTitleTextField.text = ""
+            self.slangDescriptionTextView.text = ""
+            self.contactTextField.text = ""
         }
         
         alert.addAction(okAction)
         
         present(alert, animated: true, completion: nil)
-        
-        
         
     }
     
@@ -369,18 +370,18 @@ class SlangAddViewController: UIViewController {
     
 }
 
-extension SlangAddViewController: SlangAddView, UITextViewDelegate, UITextFieldDelegate {
+extension SlangAddViewController: SlangAddView, UITextViewDelegate{
     
     func textViewDidChange(_ textView: UITextView) {
-        if textView.text == "" || textView.text.count < 3{
-            isDescriptionEmpty = false
-        } else {
+        if textView.text == "" || textView.text.count < 11 {
             isDescriptionEmpty = true
+        } else {
+            isDescriptionEmpty = false
         }
-        if isTitleEmpty == false && isDescriptionEmpty == false {
+        if isTitleEmpty == true && isDescriptionEmpty == true {
             saveSlangButton.isEnabled = false
             saveSlangButton.backgroundColor = UIColor.rgb(red: 218, green: 218, blue: 218)
-        } else if isTitleEmpty == true && isDescriptionEmpty == false || isTitleEmpty == false && isDescriptionEmpty == true {
+        } else if isTitleEmpty == false && isDescriptionEmpty == true || isTitleEmpty == true && isDescriptionEmpty == false {
             saveSlangButton.isEnabled = false
             saveSlangButton.backgroundColor = UIColor.rgb(red: 218, green: 218, blue: 218)
         } else {
@@ -398,9 +399,11 @@ extension SlangAddViewController: SlangAddView, UITextViewDelegate, UITextFieldD
     
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         let newText = (textView.text as NSString).replacingCharacters(in: range, with: text)
-        return newText.count <= 1000
+        return newText.count <= 500
     }
-    
+}
+
+extension SlangAddViewController: UITextFieldDelegate {
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         let maxLength = 250
         let currentString = (textField.text ?? "") as NSString
@@ -409,4 +412,3 @@ extension SlangAddViewController: SlangAddView, UITextViewDelegate, UITextFieldD
         return newString.count <= maxLength
     }
 }
-

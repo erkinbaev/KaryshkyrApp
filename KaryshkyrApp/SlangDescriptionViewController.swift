@@ -74,9 +74,11 @@ class SlangDescriptionViewController: UIViewController {
             
             let slang = Slang()
             slang.title = slangTitleLabel.text!
+            slang.slangDescription = slangDescriptionLabel.text!
             
             try! realm.write({
                 realm.add(slang)
+                print(slang.description)
                 //favorites?.favourites.insert(slang, at: 0)
             })
             
@@ -128,6 +130,7 @@ class SlangDescriptionViewController: UIViewController {
 
 class Slang: Object {
     @objc dynamic var title = ""
+    @objc dynamic var slangDescription = ""
 }
 
 class Favourites: Object {
