@@ -15,34 +15,26 @@ protocol FavouritesPresenterDelegate: AnyObject {
     
     func observeEditingActions()
     
-    //func removeFromFavourites()
-    
-    func dismissDescriptionView(selector: Selector)
-}
-
-struct FavouriteModel: Equatable {
-    var title: String
-    var description: String
+    func dismissDescriptionView(selector: Selector, viewController: UIViewController)
 }
 
 
 class FavouritesPresenter: FavouritesPresenterDelegate {
     
-    let nc = NotificationCenter.default
+    private let nc = NotificationCenter.default
     
     var image: String = "chevron_right"
     
     var isEnabled: Bool = false
     
-    let realm = try! Realm()
+    private let realm = try! Realm()
     
-    var slangs: Results<Slang>?
+    private var slangs: Results<Slang>?
     
     var slangsToRemove: [Slang] = []
     
-    var counter = 0
+    private var counter = 0
     
-    var multiBoxSelection = MultiBoxSelection.singleTone
     
     var favourites: [FavouriteModel] = []
     
@@ -61,16 +53,8 @@ class FavouritesPresenter: FavouritesPresenterDelegate {
     func observeEditingActions() {
         self.nc.addObserver(self, selector: #selector(startEditing), name: Notification.Name("edit"), object: nil)
         self.nc.addObserver(self, selector: #selector(stopEditing), name: Notification.Name("stop_edit"), object: nil)
-      //  self.nc.addObserver(self, selector: #selector(reloadData), name: Notification.Name("addedToFavorites"), object: nil)
+      
     }
-    
-//    @objc func reloadData() {
-//        favourites.removeAll()
-//        reversedFavourites.removeAll()
-//        getFavourites()
-//        fillTableView()
-//        view.selectRows().reloadData()
-//    }
     
     @objc func startEditing() {
         image = "box"
@@ -85,9 +69,7 @@ class FavouritesPresenter: FavouritesPresenterDelegate {
             let alert = UIAlertController(title: "Удаление!", message: "Ты уверен?", preferredStyle: .alert)
             
             let yesAction = UIAlertAction(title: "УВЕРЕН", style: .cancel) { action in
-                //self.removeFromFavourites()
                 self.view.removeData()
-                print(self.reversedFavourites)
             }
             
             let noAction = UIAlertAction(title: "НЕТ", style: .default) { action in
@@ -112,53 +94,7 @@ class FavouritesPresenter: FavouritesPresenterDelegate {
         
     }
     
-//    func removeFromFavourites() {
-//        //let selectedRows = multiBoxSelection.selectedIndexs
-//        if let selectedRows = view.selectRows().indexPathsForSelectedRows {
-//
-//        var items = [FavouriteModel]()
-//        var slangs: [Slang] = []
-//        for indexPath in selectedRows  {
-//            items.append(reversedFavourites[indexPath.row])
-//            let slang = Slang()
-//            slang.title = reversedFavourites[indexPath.row].title
-//            slang.description = reversedFavourites[i]
-//            slangs.append(slang)
-//        }
-//        // 2
-//            print(reversedFavourites)
-//
-//        for item in items {
-//            if let index = reversedFavourites.firstIndex(of: item) {
-//                reversedFavourites.remove(at: index)
-//            }
-//        }
-//
-////        for slang in slangs {
-////
-////                try! self.realm.write({
-////                    self.realm.delete(realm.objects(Slang.self).filter("title=%@",slang.title))
-////                })
-////
-////        }
-//        print(selectedRows)
-//        print(reversedFavourites)
-//        //view.editTableView(selectedIndexs: selectedRows)
-//            view.selectRows().beginUpdates()
-//            view.selectRows().deleteRows(at: selectedRows, with: .automatic)
-//            view.selectRows().endUpdates()
-//            view.selectRows().reloadData()
-//
-//       // multiBoxSelection.clearIndexs()
-//
-//       // view.reloadTableView()
-//
-//        view.showToast()
-//
-//    }
-        
-   // }
-    
+
     func fillTableView() {
         for i in 0..<slangs!.count {
             let favourite = FavouriteModel(title: slangs![i].title, description: slangs![i].slangDescription)
@@ -167,12 +103,6 @@ class FavouritesPresenter: FavouritesPresenterDelegate {
         reversedFavourites = favourites.reversed()
     }
     
-//    func slangsToRemove() {
-//        let slang = Slang()
-//        slang.title = reversedFavourites[indexPath.row].title
-//        slang.description = reversedFavourites[i]
-//        //            slangs.append(slang)
-//    }
     
     func removeFromData() {
         for slang in slangsToRemove {
@@ -182,9 +112,9 @@ class FavouritesPresenter: FavouritesPresenterDelegate {
         }
     }
     
-    func dismissDescriptionView(selector: Selector) {
-        nc.addObserver(view.self, selector: selector, name: Notification.Name("dis2"), object: nil)
+    func dismissDescriptionView(selector: Selector, viewController: UIViewController) {
+        nc.addObserver(viewController.self, selector: selector, name: Notification.Name("dismissedAtFavList"), object: nil)
     }
-    
+
     
 }

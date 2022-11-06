@@ -8,23 +8,6 @@
 import Foundation
 import UIKit
 
-class AlertManager {
-    let nc = NotificationCenter.default
-
-}
-
-extension UINavigationController: CustomAlertDelegate {
-    func alertPresentation() {
-        let alert = FavouriteAlertController()
-        alert.delegate = self
-        alert.modalPresentationStyle = .overCurrentContext
-        alert.providesPresentationContextTransitionStyle = true
-        alert.definesPresentationContext = true
-        alert.modalTransitionStyle = .crossDissolve
-        present(alert, animated: true, completion: nil)
-    }
-}
-
 class HighlightView: UIView {
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {

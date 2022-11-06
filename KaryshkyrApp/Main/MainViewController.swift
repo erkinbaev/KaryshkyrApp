@@ -14,8 +14,6 @@ protocol MainView: AnyObject {
     
     func clickSlangList()
     
-    func observeFavouriteClick(notificationCenter: NotificationCenter)
-    
     func presentViewController(viewController: UIViewController)
     
     func changeTitleValue(with value: String)
@@ -45,9 +43,6 @@ class MainViewController: UITabBarController {
         
         setupSubviews()
         self.presenter = MainViewPresenter(view: self)
-        presenter.observeAlertActions()
-        
-        
     }
     
     override func viewWillLayoutSubviews() {
@@ -57,11 +52,6 @@ class MainViewController: UITabBarController {
     func setupSubviews() {
         title = "Главный"
         self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: UIFont(name: "Roboto-Light", size: 22)!]
-        
-        
-       
-        
-        
         
         slangListViewController.tabBarItem.image = UIImage(named: "list_text")
         favouritesViewController.tabBarItem.image = UIImage(named: "fav_text")
@@ -95,14 +85,6 @@ class MainViewController: UITabBarController {
         presenter.updateFavouriteViewWhenRightItemTapped()
     }
     
-    @objc func presentAlert() {
-        presenter.alertPresentation()
-    }
-    
-    @objc func dismissAlert() {
-        presenter.dismissAlertController()
-    }
-    
 }
 
 extension MainViewController: UITabBarControllerDelegate {
@@ -110,7 +92,7 @@ extension MainViewController: UITabBarControllerDelegate {
     func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
         if viewController == favouritesViewController {
             presenter.updateRightBarOnFavourites()
-            favouritesViewController.test()
+            favouritesViewController.updateView()
             favouritesViewController.favouritesTableView.reloadData()
             
         } else {
@@ -123,8 +105,6 @@ extension MainViewController: UITabBarControllerDelegate {
 extension MainViewController: MainView {
     
     func editButtonTap() {
-//        favouritesViewController.image = "box"
-//        favouritesViewController.isEnabled = true
         presenter.nc.post(name: Notification.Name("edit"), object: nil)
         favouritesViewController.favouritesTableView.reloadData()
         let editBarButton = createCustomBarButton(image: "delete", selector: #selector(tapRightBarItem))
@@ -132,10 +112,7 @@ extension MainViewController: MainView {
     }
     
     func deleteButtonTap() {
-//        favouritesViewController.image = "chevron_right"
-//        favouritesViewController.isEnabled = false
         presenter.nc.post(name: Notification.Name("stop_edit"), object: nil)
-        //favouritesViewController.favouritesTableView.reloadData()
         let editBarButton = createCustomBarButton(image: "edit", selector: #selector(tapRightBarItem))
         navigationItem.rightBarButtonItem = editBarButton
     }
@@ -154,11 +131,6 @@ extension MainViewController: MainView {
         let rightBarItem = createCustomView()
         navigationItem.rightBarButtonItem = rightBarItem
         slangListViewController.slangsTableView.reloadData()
-    }
-    
-    func observeFavouriteClick(notificationCenter: NotificationCenter) {
-//        notificationCenter.addObserver(self, selector: #selector(presentAlert), name: Notification.Name("addedToFavorites"), object: nil)
-//        notificationCenter.addObserver(self, selector: #selector(dismissAlert), name: Notification.Name("addedToFavorites"), object: nil)
     }
     
     func presentViewController(viewController: UIViewController) {

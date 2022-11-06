@@ -7,26 +7,20 @@
 
 import Foundation
 import UIKit
-import RealmSwift
 import Toast_Swift
+
+protocol SlangDescriptionView: AnyObject {
+    func favouriteImageStatus()
+    
+    func unFavouriteImageStatus()
+    
+    func showToast()
+}
 
 class SlangDescriptionViewController: UIViewController {
     
-    let nc = NotificationCenter.default
+    private var presenter: SlangDescriptionPresenter!
     
-    
-    var counter = 0
-    
-    let realm = try! Realm()
-    
-    var slangs: Results<Slang>?
-    
-    let favouritesViewController = FavouritesViewController()
-    
-    let mainViewController = MainViewController()
-    
-    let slangListViewController = SlangListViewController()
-
    lazy var slangTitleLabel: UILabel = {
         let view = UILabel()
         view.numberOfLines = 0
@@ -55,54 +49,17 @@ class SlangDescriptionViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
+        self.presenter = SlangDescriptionPresenter(view: self)
         setupSubviews()
         
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        nc.post(name: Notification.Name("dis"), object: nil)
-        nc.post(name: Notification.Name("dis2"), object: nil)
-        print("dismissed")
+        presenter.dismissMessagesForAnotherViews()
     }
     
     @objc func addToFavouritesTap() {
-        if counter == 0 {
-            addToFavouritesImageView.image = UIImage(named: "fav_fill")
-            counter += 1
-            
-           // let favorites = realm.objects(Favourites.self).first
-            
-            let slang = Slang()
-            slang.title = slangTitleLabel.text!
-            slang.slangDescription = slangDescriptionLabel.text!
-            
-            try! realm.write({
-                realm.add(slang)
-                print(slang.description)
-                //favorites?.favourites.insert(slang, at: 0)
-            })
-            
-            nc.post(name: Notification.Name("addedToFavorites"), object: nil)
-            self.view.makeToast("Добавлено в избранное", duration: 2.0, position: .bottom)
-            
-        } else {
-            addToFavouritesImageView.image = UIImage(named: "fav")
-            counter = 0
-            let slang = Slang()
-            slang.title = slangTitleLabel.text!
-            
-//            for index in 0..<slangs!.count {
-//                if slangs![index].title == slang.title {
-//                    try! realm.write({
-//                        realm.delete(slang)
-//                    })
-//                }
-//            }
-            
-        }
-        
-      
-       
+        presenter.addToFavourites(title: slangTitleLabel.text!, description: slangDescriptionLabel.text!)
     }
     
     func setupSubviews() {
@@ -128,12 +85,19 @@ class SlangDescriptionViewController: UIViewController {
     
 }
 
-class Slang: Object {
-    @objc dynamic var title = ""
-    @objc dynamic var slangDescription = ""
+extension SlangDescriptionViewController: SlangDescriptionView {
+    func favouriteImageStatus() {
+        addToFavouritesImageView.image = UIImage(named: "fav_fill")
+    }
+    
+    func unFavouriteImageStatus() {
+        addToFavouritesImageView.image = UIImage(named: "fav")
+    }
+    
+    func showToast() {
+        self.view.makeToast("Добавлено в избранное", duration: 2.0, position: .bottom)
+    }
 }
 
-class Favourites: Object {
-   let favourites = List<Slang>()
-}
+
 

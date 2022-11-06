@@ -19,50 +19,47 @@ protocol SlangListPresenterDelegate: AnyObject {
     
     func searchSlang(text: String)
     
-    func getVerifiedSlangs()
+    func reloadCellWhenDescriptionViewDismissed(viewController: UIViewController, selector: Selector)
+    
+    func dismissKeyboard()
+    
+    func getWords(isRefresh: Bool, refreshControl: UIRefreshControl)
+    
+    func getNextWords(isRefresh: Bool)
+    
+    func observeData()
     
 }
 
 class SlangListPresenter : SlangListPresenterDelegate {
+    
+    private let nc = NotificationCenter.default
+    
     public weak var view: SlangListView!
     
     static var words: [WordModel] = []
     
-    var result = WordsResponse(count: 0, next: "", results: words)
+    private var result = WordsResponse(count: 0, next: "", results: words)
     
     var filteredResults: [WordModel] = []
     
-    var data: [WordModel] = []
+    private var data: [WordModel] = []
+    
+    private var slangs: [WordModel] = []
     
     var heightForNoResultsLabel: NSLayoutConstraint? = nil
+    
+    private var networkApi = NetworkApi()
+    
+    private var offset = 0
+    
+    private var limit = 0
     
     required init(view: SlangListView) {
         self.view = view
     }
     
-    func retrieve(completion: @escaping () -> ()) {
-        let url = URL(string: "https://karyshkyr.geekstudio.kg/api/v1/words/")
-        
-        URLSession.shared.dataTask(with: url!) { (data, response, error) in
-            if error == nil && data != nil {
-                do {
-                    let test = try JSONDecoder().decode(WordsResponse.self, from: data!)
-                    print(test)
-                    self.result.results = test.results
-                    //self.getVerifiedSlangs()
-                    print(test.results.count)
-                    DispatchQueue.main.async {
-                        completion()
-                    }
-                } catch {
-                print("myau")
-                }
-            }
-           
-        }.resume()
-    }
-    
-    func getVerifiedSlangs() {
+    private func getVerifiedSlangs(words: [WordModel]) {
         for i in result.results {
             if i.is_verified {
                 filteredResults.append(i)
@@ -71,8 +68,52 @@ class SlangListPresenter : SlangListPresenterDelegate {
         }
     }
     
+    func observeData() {
+        if result.count == 0 {
+            view.refreshing()
+        } else {
+            view.endRefreshing()
+        }
+    }
     
+    func getWords(isRefresh: Bool, refreshControl: UIRefreshControl) {
+       
+        networkApi.getWords(isRefresh: isRefresh, refreshControl: refreshControl) { words in
+            self.result = WordsResponse(count: words.count, next: words.next, previous: words.previous, results: words.results)
+            for i in words.results {
+                if i.is_verified {
+                    self.filteredResults.append(i)
+                    self.data.append(i)
+                }
+            }
+            self.view.updateSlangList()
+        }
+    }
     
+    func getNextWords(isRefresh: Bool) {
+        
+        if result.next != nil {
+            networkApi.getNextWords(next: result.next!) { words in
+    
+                self.result.next = words.next
+                
+                for i in words.results {
+                    if i.is_verified {
+                        self.filteredResults.append(i)
+                        self.data.append(i)
+                    }
+                }
+                
+                self.view.updateSlangList()
+                
+            }
+        } else {
+            DispatchQueue.main.async {
+                self.view.endRefreshing()
+            }
+        }
+    }
+
     func presentBottomSheet(at index: Int) {
         view.cellTap(at: index)
     }
@@ -93,7 +134,7 @@ class SlangListPresenter : SlangListPresenterDelegate {
             self.heightForNoResultsLabel?.constant = 0
         }
         
-        for slang in self.result.results {
+        for slang in self.data{
             if slang.title.uppercased().contains(text.uppercased()) {
                 filteredResults.append(slang)
             }
@@ -113,4 +154,16 @@ class SlangListPresenter : SlangListPresenterDelegate {
             self.view.updateSlangList()
         }
     }
+    
+    func dismissKeyboard() {
+        DispatchQueue.main.async {
+            self.view.dismissKeyboardWhenSearchDidFinish()
+        }
+    }
+    
+    func reloadCellWhenDescriptionViewDismissed(viewController: UIViewController, selector: Selector) {
+        nc.addObserver(viewController.self, selector: selector, name: Notification.Name("dismissedAtList"), object: nil)
+    }
 }
+
+

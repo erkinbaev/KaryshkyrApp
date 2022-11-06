@@ -28,16 +28,6 @@ protocol FavouritesView: AnyObject {
 
 class FavouritesViewController: UIViewController {
     
-//    var image: String = "chevron_right"
-//
-//    var isEnabled: Bool = false
-//
-//    let realm = try! Realm()
-//
-//    var slangs: Results<Slang>?
-//
-//    var counter = 0
-    
     private var presenter: FavouritesPresenter!
     
     private lazy var contentView: UIView = {
@@ -74,20 +64,14 @@ class FavouritesViewController: UIViewController {
         super.viewDidLoad()
         
         self.presenter = FavouritesPresenter(view: self)
-        //view.backgroundColor = .white
+       
         setupSubviews()
-        
-        test()
+        updateView()
         presenter.observeEditingActions()
-        
-       // slangs = realm.objects(Slang.self)
-       // print(slangs!)
-        presenter.dismissDescriptionView(selector: #selector(reloadCell))
-        
-        
+        presenter.dismissDescriptionView(selector: #selector(reloadCell), viewController: self)
     }
     
-    func test(){
+    func updateView(){
         presenter.favourites.removeAll()
         presenter.reversedFavourites.removeAll()
         presenter.getFavourites()
@@ -103,11 +87,7 @@ class FavouritesViewController: UIViewController {
         }
     }
     
-   
-    
     func setupSubviews() {
-        
-        
         
         view.addSubview(contentView)
         contentView.translatesAutoresizingMaskIntoConstraints = false
@@ -150,14 +130,14 @@ extension FavouritesViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "test_cell", for: indexPath) as! SlangCell
-        //cell.slangLabel.text = presenter.slangs?.reversed()[indexPath.row].title
+        
         cell.slangLabel.text = presenter.reversedFavourites[indexPath.row].title
         if presenter.isEnabled == true {
             cell.selectionStyle = .none
         }
         cell.descriptionImageView.image = UIImage(named: presenter.image)
         cell.descriptionImageView.isUserInteractionEnabled = presenter.isEnabled
-       // cell.currentIndexPath = indexPath
+       
         return cell
     }
 
@@ -169,7 +149,6 @@ extension FavouritesViewController: UITableViewDelegate {
     }
  
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print(favouritesTableView.indexPathsForSelectedRows!)
         
         let cell = favouritesTableView.cellForRow(at: indexPath) as! SlangCell
         if presenter.isEnabled != true {

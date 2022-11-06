@@ -8,14 +8,14 @@
 
 /* Begin PBXBuildFile section */
 		05B7A9629801B102319E9964 /* Pods_KaryshkyrApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 402063B825E795FEC145FB8B /* Pods_KaryshkyrApp.framework */; };
+		CE222A982916439A006820B4 /* NetworkApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE222A972916439A006820B4 /* NetworkApi.swift */; };
 		CE285E3128F9558E0040BE6E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE285E3028F9558E0040BE6E /* AppDelegate.swift */; };
 		CE285E3328F9558E0040BE6E /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE285E3228F9558E0040BE6E /* SceneDelegate.swift */; };
 		CE285E3528F9558E0040BE6E /* SlangListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE285E3428F9558E0040BE6E /* SlangListViewController.swift */; };
 		CE285E3828F9558E0040BE6E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CE285E3628F9558E0040BE6E /* Main.storyboard */; };
 		CE285E3A28F955910040BE6E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CE285E3928F955910040BE6E /* Assets.xcassets */; };
 		CE285E4528F9621A0040BE6E /* SlangCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE285E4428F9621A0040BE6E /* SlangCell.swift */; };
-		CE54D24D2903F38900CD45EA /* FavouriteAlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE54D24C2903F38900CD45EA /* FavouriteAlertView.swift */; };
-		CE54D24F2904075700CD45EA /* AlertManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE54D24E2904075700CD45EA /* AlertManager.swift */; };
+		CE54D24F2904075700CD45EA /* ViewClickEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE54D24E2904075700CD45EA /* ViewClickEffect.swift */; };
 		CE54D2732906737600CD45EA /* SplashViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE54D2722906737600CD45EA /* SplashViewController.swift */; };
 		CE54D2762906788D00CD45EA /* Roboto-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CE54D2752906788D00CD45EA /* Roboto-Black.ttf */; };
 		CE54D278290678AD00CD45EA /* Roboto-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CE54D277290678AD00CD45EA /* Roboto-Bold.ttf */; };
@@ -26,8 +26,6 @@
 		CE54D2872906971200CD45EA /* MainViewPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE54D2862906971200CD45EA /* MainViewPresenter.swift */; };
 		CE54D2A72907DF4200CD45EA /* Extension + UIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE54D2A62907DF4200CD45EA /* Extension + UIImage.swift */; };
 		CE54D2C929094B7B00CD45EA /* FavouritesPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE54D2C829094B7B00CD45EA /* FavouritesPresenter.swift */; };
-		CE54D2E2290BDA3A00CD45EA /* MultiBoxSelection.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE54D2E1290BDA3A00CD45EA /* MultiBoxSelection.swift */; };
-		CE7F11F228F9806A00D93C8D /* SlangsViewBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7F11F128F9806A00D93C8D /* SlangsViewBuilder.swift */; };
 		CE7F11F428F981C100D93C8D /* FavouritesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7F11F328F981C100D93C8D /* FavouritesViewController.swift */; };
 		CE7F125C28FC1D3700D93C8D /* Extension + ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7F125B28FC1D3700D93C8D /* Extension + ViewController.swift */; };
 		CE7F125E28FC224500D93C8D /* SlangAddViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7F125D28FC224500D93C8D /* SlangAddViewController.swift */; };
@@ -36,12 +34,17 @@
 		CEB5871128FFEE31004A6AD2 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEB5871028FFEE31004A6AD2 /* MainViewController.swift */; };
 		CEB5877329029BD7004A6AD2 /* SlangListPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEB5877229029BD7004A6AD2 /* SlangListPresenter.swift */; };
 		CEB5877729029DAB004A6AD2 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEB5877629029DAB004A6AD2 /* Models.swift */; };
+		CEBBE4D92917B7FB00D2B598 /* SlangDescriptionPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEBBE4D82917B7FB00D2B598 /* SlangDescriptionPresenter.swift */; };
+		CEBBE4DB2917B99500D2B598 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEBBE4DA2917B99500D2B598 /* Model.swift */; };
+		CEBBE4DD2917C2ED00D2B598 /* PostModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEBBE4DC2917C2ED00D2B598 /* PostModel.swift */; };
+		CEBBE4DF2917C49F00D2B598 /* FavouriteModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEBBE4DE2917C49F00D2B598 /* FavouriteModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		008CE693909DC854747F59EA /* Pods-KaryshkyrApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KaryshkyrApp.release.xcconfig"; path = "Target Support Files/Pods-KaryshkyrApp/Pods-KaryshkyrApp.release.xcconfig"; sourceTree = "<group>"; };
 		402063B825E795FEC145FB8B /* Pods_KaryshkyrApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_KaryshkyrApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7713576823D518153435813E /* Pods-KaryshkyrApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KaryshkyrApp.debug.xcconfig"; path = "Target Support Files/Pods-KaryshkyrApp/Pods-KaryshkyrApp.debug.xcconfig"; sourceTree = "<group>"; };
+		CE222A972916439A006820B4 /* NetworkApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkApi.swift; sourceTree = "<group>"; };
 		CE285E2D28F9558E0040BE6E /* KaryshkyrApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KaryshkyrApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CE285E3028F9558E0040BE6E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		CE285E3228F9558E0040BE6E /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -50,8 +53,7 @@
 		CE285E3928F955910040BE6E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		CE285E3E28F955910040BE6E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		CE285E4428F9621A0040BE6E /* SlangCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlangCell.swift; sourceTree = "<group>"; };
-		CE54D24C2903F38900CD45EA /* FavouriteAlertView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavouriteAlertView.swift; sourceTree = "<group>"; };
-		CE54D24E2904075700CD45EA /* AlertManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertManager.swift; sourceTree = "<group>"; };
+		CE54D24E2904075700CD45EA /* ViewClickEffect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewClickEffect.swift; sourceTree = "<group>"; };
 		CE54D2722906737600CD45EA /* SplashViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashViewController.swift; sourceTree = "<group>"; };
 		CE54D2752906788D00CD45EA /* Roboto-Black.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Black.ttf"; sourceTree = "<group>"; };
 		CE54D277290678AD00CD45EA /* Roboto-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Bold.ttf"; sourceTree = "<group>"; };
@@ -62,8 +64,6 @@
 		CE54D2862906971200CD45EA /* MainViewPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewPresenter.swift; sourceTree = "<group>"; };
 		CE54D2A62907DF4200CD45EA /* Extension + UIImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension + UIImage.swift"; sourceTree = "<group>"; };
 		CE54D2C829094B7B00CD45EA /* FavouritesPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavouritesPresenter.swift; sourceTree = "<group>"; };
-		CE54D2E1290BDA3A00CD45EA /* MultiBoxSelection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiBoxSelection.swift; sourceTree = "<group>"; };
-		CE7F11F128F9806A00D93C8D /* SlangsViewBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlangsViewBuilder.swift; sourceTree = "<group>"; };
 		CE7F11F328F981C100D93C8D /* FavouritesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavouritesViewController.swift; sourceTree = "<group>"; };
 		CE7F125B28FC1D3700D93C8D /* Extension + ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension + ViewController.swift"; sourceTree = "<group>"; };
 		CE7F125D28FC224500D93C8D /* SlangAddViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlangAddViewController.swift; sourceTree = "<group>"; };
@@ -72,6 +72,10 @@
 		CEB5871028FFEE31004A6AD2 /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		CEB5877229029BD7004A6AD2 /* SlangListPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlangListPresenter.swift; sourceTree = "<group>"; };
 		CEB5877629029DAB004A6AD2 /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
+		CEBBE4D82917B7FB00D2B598 /* SlangDescriptionPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlangDescriptionPresenter.swift; sourceTree = "<group>"; };
+		CEBBE4DA2917B99500D2B598 /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
+		CEBBE4DC2917C2ED00D2B598 /* PostModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostModel.swift; sourceTree = "<group>"; };
+		CEBBE4DE2917C49F00D2B598 /* FavouriteModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavouriteModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -103,6 +107,32 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		CE222A9529164322006820B4 /* Network */ = {
+			isa = PBXGroup;
+			children = (
+				CE222A972916439A006820B4 /* NetworkApi.swift */,
+			);
+			path = Network;
+			sourceTree = "<group>";
+		};
+		CE222A962916433B006820B4 /* SplashScreen */ = {
+			isa = PBXGroup;
+			children = (
+				CE54D2722906737600CD45EA /* SplashViewController.swift */,
+				CE54D282290684E500CD45EA /* LaunchScreen.storyboard */,
+			);
+			path = SplashScreen;
+			sourceTree = "<group>";
+		};
+		CE222A99291643DA006820B4 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				CE285E3028F9558E0040BE6E /* AppDelegate.swift */,
+				CE285E3228F9558E0040BE6E /* SceneDelegate.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
 		CE285E2428F9558E0040BE6E = {
 			isa = PBXGroup;
 			children = (
@@ -124,23 +154,17 @@
 		CE285E2F28F9558E0040BE6E /* KaryshkyrApp */ = {
 			isa = PBXGroup;
 			children = (
+				CEBBE4D72917B76100D2B598 /* SlangDescription */,
+				CE222A99291643DA006820B4 /* App */,
+				CE222A962916433B006820B4 /* SplashScreen */,
+				CE222A9529164322006820B4 /* Network */,
 				CE54D2A52907DF1A00CD45EA /* SupportFiles */,
-				CE7F125F28FD698A00D93C8D /* SlangDescriptionViewController.swift */,
-				CE54D24C2903F38900CD45EA /* FavouriteAlertView.swift */,
 				CE54D2742906787400CD45EA /* Fonts */,
 				CEB5877129029B80004A6AD2 /* SlangList */,
 				CEB5870928FEA4D7004A6AD2 /* AddSlang */,
 				CEB5870828FEA4C8004A6AD2 /* Main */,
 				CEB5870728FEA4BB004A6AD2 /* Favourites */,
-				CE285E3028F9558E0040BE6E /* AppDelegate.swift */,
-				CE285E3228F9558E0040BE6E /* SceneDelegate.swift */,
-				CE285E3628F9558E0040BE6E /* Main.storyboard */,
-				CE54D282290684E500CD45EA /* LaunchScreen.storyboard */,
-				CE285E3928F955910040BE6E /* Assets.xcassets */,
 				CE285E3E28F955910040BE6E /* Info.plist */,
-				CE7F125B28FC1D3700D93C8D /* Extension + ViewController.swift */,
-				CE54D24E2904075700CD45EA /* AlertManager.swift */,
-				CE54D2722906737600CD45EA /* SplashViewController.swift */,
 			);
 			path = KaryshkyrApp;
 			sourceTree = "<group>";
@@ -161,6 +185,10 @@
 			isa = PBXGroup;
 			children = (
 				CE54D2A62907DF4200CD45EA /* Extension + UIImage.swift */,
+				CE7F125B28FC1D3700D93C8D /* Extension + ViewController.swift */,
+				CE54D24E2904075700CD45EA /* ViewClickEffect.swift */,
+				CE285E3628F9558E0040BE6E /* Main.storyboard */,
+				CE285E3928F955910040BE6E /* Assets.xcassets */,
 			);
 			path = SupportFiles;
 			sourceTree = "<group>";
@@ -170,7 +198,7 @@
 			children = (
 				CE7F11F328F981C100D93C8D /* FavouritesViewController.swift */,
 				CE54D2C829094B7B00CD45EA /* FavouritesPresenter.swift */,
-				CE54D2E1290BDA3A00CD45EA /* MultiBoxSelection.swift */,
+				CEBBE4DE2917C49F00D2B598 /* FavouriteModel.swift */,
 			);
 			path = Favourites;
 			sourceTree = "<group>";
@@ -189,6 +217,7 @@
 			children = (
 				CE7F125D28FC224500D93C8D /* SlangAddViewController.swift */,
 				CEB5870A28FEA639004A6AD2 /* SlangAddPresenter.swift */,
+				CEBBE4DC2917C2ED00D2B598 /* PostModel.swift */,
 			);
 			path = AddSlang;
 			sourceTree = "<group>";
@@ -198,11 +227,20 @@
 			children = (
 				CE285E4428F9621A0040BE6E /* SlangCell.swift */,
 				CE285E3428F9558E0040BE6E /* SlangListViewController.swift */,
-				CE7F11F128F9806A00D93C8D /* SlangsViewBuilder.swift */,
 				CEB5877229029BD7004A6AD2 /* SlangListPresenter.swift */,
 				CEB5877629029DAB004A6AD2 /* Models.swift */,
 			);
 			path = SlangList;
+			sourceTree = "<group>";
+		};
+		CEBBE4D72917B76100D2B598 /* SlangDescription */ = {
+			isa = PBXGroup;
+			children = (
+				CE7F125F28FD698A00D93C8D /* SlangDescriptionViewController.swift */,
+				CEBBE4D82917B7FB00D2B598 /* SlangDescriptionPresenter.swift */,
+				CEBBE4DA2917B99500D2B598 /* Model.swift */,
+			);
+			path = SlangDescription;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -326,21 +364,23 @@
 			buildActionMask = 2147483647;
 			files = (
 				CE7F125C28FC1D3700D93C8D /* Extension + ViewController.swift in Sources */,
+				CEBBE4D92917B7FB00D2B598 /* SlangDescriptionPresenter.swift in Sources */,
 				CEB5877729029DAB004A6AD2 /* Models.swift in Sources */,
-				CE54D24F2904075700CD45EA /* AlertManager.swift in Sources */,
+				CEBBE4DF2917C49F00D2B598 /* FavouriteModel.swift in Sources */,
+				CE54D24F2904075700CD45EA /* ViewClickEffect.swift in Sources */,
 				CEB5871128FFEE31004A6AD2 /* MainViewController.swift in Sources */,
 				CE7F11F428F981C100D93C8D /* FavouritesViewController.swift in Sources */,
 				CE285E3528F9558E0040BE6E /* SlangListViewController.swift in Sources */,
 				CEB5877329029BD7004A6AD2 /* SlangListPresenter.swift in Sources */,
 				CE285E3128F9558E0040BE6E /* AppDelegate.swift in Sources */,
-				CE54D2E2290BDA3A00CD45EA /* MultiBoxSelection.swift in Sources */,
 				CE7F125E28FC224500D93C8D /* SlangAddViewController.swift in Sources */,
+				CEBBE4DD2917C2ED00D2B598 /* PostModel.swift in Sources */,
 				CE54D2A72907DF4200CD45EA /* Extension + UIImage.swift in Sources */,
 				CE285E3328F9558E0040BE6E /* SceneDelegate.swift in Sources */,
-				CE54D24D2903F38900CD45EA /* FavouriteAlertView.swift in Sources */,
 				CEB5870B28FEA639004A6AD2 /* SlangAddPresenter.swift in Sources */,
-				CE7F11F228F9806A00D93C8D /* SlangsViewBuilder.swift in Sources */,
 				CE7F126028FD698A00D93C8D /* SlangDescriptionViewController.swift in Sources */,
+				CE222A982916439A006820B4 /* NetworkApi.swift in Sources */,
+				CEBBE4DB2917B99500D2B598 /* Model.swift in Sources */,
 				CE54D2872906971200CD45EA /* MainViewPresenter.swift in Sources */,
 				CE285E4528F9621A0040BE6E /* SlangCell.swift in Sources */,
 				CE54D2732906737600CD45EA /* SplashViewController.swift in Sources */,
@@ -484,6 +524,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 6F4D689QPK;
@@ -501,6 +542,7 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = kg.geekstudio.KaryshkyrApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -513,6 +555,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 6F4D689QPK;
@@ -530,6 +573,7 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = kg.geekstudio.KaryshkyrApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

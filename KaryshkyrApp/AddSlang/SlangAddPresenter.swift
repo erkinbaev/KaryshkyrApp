@@ -6,11 +6,14 @@
 //
 
 import Foundation
+import UIKit
 
 protocol SlangAddViewPresenter: AnyObject {
     init(view: SlangAddView)
     
     func postRequest(title: String, description: String, contact: String, is_verified: Bool)
+    
+    func showAlert()
 }
 
 class SlangAddPresenter: SlangAddViewPresenter {
@@ -46,10 +49,7 @@ class SlangAddPresenter: SlangAddViewPresenter {
             }
             
             do {
-                
-                
-                //let response = try JSONSerialization.jsonObject(with: data, options: .allowFragments)
-                
+
                 let response = try JSONDecoder().decode(SlangPostModel.self, from: data)
                 print("Success: \(response)")
                 
@@ -60,56 +60,27 @@ class SlangAddPresenter: SlangAddViewPresenter {
         }
         task.resume()
     }
+    
+    func showAlert() {
+        let alert = UIAlertController(title: "", message: "Сленг на рассмотрении, если сленг зыңк то мы его каңкретна добавим ежжи, если нет то не обисуй", preferredStyle: .alert)
+        
+        let okAction = UIAlertAction(title: "OK", style: .cancel) { action in
+            DispatchQueue.main.async {
+                self.view.clearTextFields()
+            }
+        }
+        
+        alert.addAction(okAction)
+        
+        DispatchQueue.main.async {
+            self.view.presentAlert(alert: alert)
+        }
+       
+    }
+    
+    
 }
 
-struct SlangPostModel: Codable {
-   
-        var title: String
-        var description: String
-        var contact: String
-        var is_verified: Bool
 
 
-}
 
-//func postRequest(title: String, body: String, userId: Int) {
-//
-//        guard let url = URL(string: "https://jsonplaceholder.typicode.com/posts")
-//        else {return}
-//
-//        var request = URLRequest(url: url)
-//
-//        request.httpMethod = "POST"
-//
-//    request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-//
-//    let body: [String: AnyHashable] = [
-//        "userId": userId,
-//        "title": title,
-//        "body": body
-//    ]
-//
-//    request.httpBody =
-//    try? JSONSerialization.data(withJSONObject: body, options: .fragmentsAllowed)
-//
-//    let task = URLSession.shared.dataTask(with: request) { data, response, error in
-//
-//        guard let data = data, error == nil else {
-//            return
-//        }
-//
-//        do {
-//
-//
-//            //let response = try JSONSerialization.jsonObject(with: data, options: .allowFragments)
-//
-//            let response = try JSONDecoder().decode(PostModel.self, from: data)
-//            print("Success: \(response)")
-//        } catch {
-//            print("error")
-//        }
-//
-//    }
-//    task.resume()
-//
-//}

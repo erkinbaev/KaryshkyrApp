@@ -10,14 +10,6 @@ import UIKit
 
 class SlangCell: UITableViewCell {
     
-//    let multiBoxSelection = MultiBoxSelection.singleTone
-//
-//    var counter = 0
-//
-//    var isChosen = false
-//
-//    var currentIndexPath: IndexPath? = nil
-    
     lazy var slangLabel: UILabel = {
         let view = UILabel()
         view.font = UIFont(name: "Roboto-Light", size: 16)
@@ -29,9 +21,6 @@ class SlangCell: UITableViewCell {
         let view = UIImageView()
         view.image = UIImage(named: "chevron_right")
         view.contentMode = .scaleAspectFit
-       // view.isUserInteractionEnabled = false
-       // let tap = UITapGestureRecognizer(target: self, action: #selector(markUnmarkBox))
-       // view.addGestureRecognizer(tap)
         return view
     }()
     
@@ -45,7 +34,6 @@ class SlangCell: UITableViewCell {
         super.setSelected(selected, animated: animated)
 
              if selected {
-                 //contentView.backgroundColor = UIColor.white
              } else {
                  contentView.backgroundColor = UIColor.rgb(red: 246, green: 246, blue: 251)
              }
@@ -76,20 +64,5 @@ class SlangCell: UITableViewCell {
         underLine.heightAnchor.constraint(equalToConstant: 0.5).isActive = true
     }
     
-//    @objc func markUnmarkBox() {
-//        if counter == 0 {
-//            descriptionImageView.image = UIImage(named: "checkmark")
-//            multiBoxSelection.addSelectedIndex(indexPath: currentIndexPath!)
-//            counter += 1
-//        } else {
-//            descriptionImageView.image = UIImage(named: "box")
-//            multiBoxSelection.removeIndex(indexPath: currentIndexPath!)
-//            counter = 0
-//        }
-//    }
-    
-    func fillFavourite(title: String, image: String, isEnabled: Bool) {
-        
-    }
     
 }

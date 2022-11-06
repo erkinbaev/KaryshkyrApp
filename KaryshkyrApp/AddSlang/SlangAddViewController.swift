@@ -9,16 +9,22 @@ import Foundation
 import UIKit
 
 protocol SlangAddView: AnyObject {
-    //func addSlangTap()
+    func disableButtonStatus()
+    
+    func enableButtonStatus()
+    
+    func clearTextFields()
+    
+    func presentAlert(alert: UIAlertController)
 }
 
 class SlangAddViewController: UIViewController {
     
     private var presenter: SlangAddPresenter!
     
-    var isTitleEmpty: Bool = true
+    private var isTitleEmpty: Bool = true
     
-    var isDescriptionEmpty: Bool = true
+    private var isDescriptionEmpty: Bool = true
     
     private lazy var titleView: UIView = {
         let view = UIView()
@@ -172,15 +178,10 @@ class SlangAddViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
-        
         view.backgroundColor = .white
         setupSubviews()
         presenter = SlangAddPresenter(view: self)
         let tap = UITapGestureRecognizer(target: self, action: #selector(UIInputViewController.dismissKeyboard))
-
-           
-
         view.addGestureRecognizer(tap)
     }
     
@@ -191,21 +192,14 @@ class SlangAddViewController: UIViewController {
             isTitleEmpty = false
         }
         if isTitleEmpty == true && isDescriptionEmpty == true {
-            saveSlangButton.isEnabled = false
-            saveSlangButton.backgroundColor = UIColor.rgb(red: 218, green: 218, blue: 218)
+           disableButtonStatus()
         } else if isTitleEmpty == false && isDescriptionEmpty == true || isTitleEmpty == true && isDescriptionEmpty == false {
-            saveSlangButton.isEnabled = false
-            saveSlangButton.backgroundColor = UIColor.rgb(red: 218, green: 218, blue: 218)
+           disableButtonStatus()
         } else {
-            saveSlangButton.isEnabled = true
-            saveSlangButton.backgroundColor = UIColor.rgb(red: 2, green: 126, blue: 216)
+            enableButtonStatus()
         }
         
         titleCharactersAmountLabel.text = "\(slangTitleTextField.text!.count)/250"
-    }
-    
-    @objc func editingDescriptionTextFiedl() {
-        
     }
     
     @objc func dismissKeyboard() {
@@ -214,17 +208,7 @@ class SlangAddViewController: UIViewController {
     
     @objc func saveSlangTap() {
         self.presenter.postRequest(title: self.slangTitleTextField.text!, description: self.slangDescriptionTextView.text!, contact: self.contactTextField.text!, is_verified: false)
-        let alert = UIAlertController(title: "", message: "Сленг на рассмотрении, если сленг зыңк то мы его каңкретна добавим ежжи, если нет то не обисуй", preferredStyle: .alert)
-        
-        let okAction = UIAlertAction(title: "OK", style: .cancel) { action in
-            self.slangTitleTextField.text = ""
-            self.slangDescriptionTextView.text = ""
-            self.contactTextField.text = ""
-        }
-        
-        alert.addAction(okAction)
-        
-        present(alert, animated: true, completion: nil)
+        presenter.showAlert()
         
     }
     
@@ -371,30 +355,41 @@ class SlangAddViewController: UIViewController {
 }
 
 extension SlangAddViewController: SlangAddView, UITextViewDelegate{
+    func disableButtonStatus() {
+        saveSlangButton.isEnabled = false
+        saveSlangButton.backgroundColor = UIColor.rgb(red: 218, green: 218, blue: 218)
+    }
+    
+    func enableButtonStatus() {
+        saveSlangButton.isEnabled = true
+        saveSlangButton.backgroundColor = UIColor.rgb(red: 2, green: 126, blue: 216)
+    }
+    
+    func clearTextFields() {
+        self.slangTitleTextField.text = ""
+        self.slangDescriptionTextView.text = ""
+        self.contactTextField.text = ""
+    }
+    
+    func presentAlert(alert: UIAlertController) {
+        present(alert, animated: true, completion: nil)
+    }
     
     func textViewDidChange(_ textView: UITextView) {
-        if textView.text == "" || textView.text.count < 11 {
+        if textView.text == "" || textView.text.count < 10 {
             isDescriptionEmpty = true
         } else {
             isDescriptionEmpty = false
         }
         if isTitleEmpty == true && isDescriptionEmpty == true {
-            saveSlangButton.isEnabled = false
-            saveSlangButton.backgroundColor = UIColor.rgb(red: 218, green: 218, blue: 218)
+            disableButtonStatus()
         } else if isTitleEmpty == false && isDescriptionEmpty == true || isTitleEmpty == true && isDescriptionEmpty == false {
-            saveSlangButton.isEnabled = false
-            saveSlangButton.backgroundColor = UIColor.rgb(red: 218, green: 218, blue: 218)
+            disableButtonStatus()
         } else {
-            saveSlangButton.isEnabled = true
-            saveSlangButton.backgroundColor = UIColor.rgb(red: 2, green: 126, blue: 216)
+            enableButtonStatus()
         }
-        
         descriptionCharactersAmountLabel.text = "\(textView.text.count)/500"
         
-       
-        print(isTitleEmpty)
-        print(isDescriptionEmpty)
-        print(textView.text!)
     }
     
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {

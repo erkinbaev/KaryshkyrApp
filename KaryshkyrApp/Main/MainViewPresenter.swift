@@ -15,21 +15,16 @@ protocol MainViewPresenterDelegate: AnyObject {
     
     func updateRightBarOnSlangList()
     
-    func observeAlertActions()
-    
-    func dismissAlertController()
-    
     func updateFavouriteViewWhenRightItemTapped()
     
 }
 
-class MainViewPresenter: MainViewPresenterDelegate, CustomAlertDelegate {
+class MainViewPresenter: MainViewPresenterDelegate {
     
     public var view: MainView!
     
     let nc = NotificationCenter.default
     
-    private let alert = FavouriteAlertController()
     
     private var counter = 0
     
@@ -49,37 +44,6 @@ class MainViewPresenter: MainViewPresenterDelegate, CustomAlertDelegate {
         }
     }
     
-    func observeAlertActions() {
-        DispatchQueue.main.async {
-            self.view.observeFavouriteClick(notificationCenter: self.nc)
-        }
-    }
-    
-    func alertPresentation() {
-                alert.delegate = self
-                alert.modalPresentationStyle = .overCurrentContext
-                alert.providesPresentationContextTransitionStyle = true
-                alert.definesPresentationContext = true
-                alert.modalTransitionStyle = .crossDissolve
-
-        DispatchQueue.main.async {
-            self.view.changeTitleValue(with: "")
-            self.view.presentViewController(viewController: self.alert)
-            let when = DispatchTime.now() + 3
-            DispatchQueue.main.asyncAfter(deadline: when){
-                self.dismissAlertController()
-                self.view.changeTitleValue(with: "Главный")  // nil
-            }
-        }
-        
-        
-    }
-    
-    func dismissAlertController() {
-        DispatchQueue.main.async {
-            self.alert.dismissAlert()
-        }
-    }
     
     func updateFavouriteViewWhenRightItemTapped() {
         if counter == 0 {

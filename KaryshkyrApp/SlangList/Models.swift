@@ -9,7 +9,8 @@ import Foundation
 
 struct WordsResponse: Codable {
     var count: Int
-    var next: String
+    var next: String?
+    var previous: String?
     var results: [WordModel]
 }
 

@@ -13,18 +13,21 @@ protocol SlangListView: AnyObject {
     func navigate(viewController: UIViewController)
     
     func updateSlangList()
+    
+    func dismissKeyboardWhenSearchDidFinish()
+    
+    func refreshing()
+    
+    func endRefreshing()
 }
 
 class SlangListViewController: UIViewController, UIGestureRecognizerDelegate {
-    var selectedIndex: IndexPath = []
-    
+   
     private var presenter: SlangListPresenter!
     
-    let alert = FavouriteAlertController()
+    private var lastContentOffset: CGFloat = 0
     
-    let nc = NotificationCenter.default
-    
-    var lastContentOffset: CGFloat = 0
+    private let refreshControl = UIRefreshControl()
     
     private lazy var contentView: UIView = {
         let view = UIView()
@@ -98,32 +101,27 @@ class SlangListViewController: UIViewController, UIGestureRecognizerDelegate {
         self.presenter = SlangListPresenter(view: self)
         presenter.heightForNoResultsLabel?.constant = 0
         setupSubviews()
-        presenter.retrieve {
-            self.presenter.getVerifiedSlangs()
-            self.slangsTableView.reloadData()
-        }
-        
-        nc.addObserver(self, selector: #selector(reloadRow), name: Notification.Name("dis"), object: nil)
-        
-        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyBoard))
-        tap.delegate = self
-                //shouldReceiveTouch on UITableViewCellContentView
-        tap.cancelsTouchesInView = false
-        self.view.addGestureRecognizer(tap)
-        
-        
-
-       
-       
+        presenter.getWords(isRefresh: true, refreshControl: refreshControl)
+        presenter.observeData()
+        refreshControl.addTarget(self, action: #selector(refreshView), for: .valueChanged)
+        presenter.dismissKeyboard()
+        presenter.reloadCellWhenDescriptionViewDismissed(viewController: self, selector: #selector(reloadRow))
     }
     
+    @objc func refresView() {
+        presenter.getNextWords(isRefresh: true)
+        DispatchQueue.main.async {
+            self.refreshControl.endRefreshing()
+        }
+    }
     
+    @objc func refreshView() {
+            DispatchQueue.main.async {
+                self.refreshControl.endRefreshing()
+            }
+    }
+
     @objc func reloadRow() {
-       
-//        let cell = slangsTableView.cellForRow(at: selectedIndex) as! SlangCell
-//                cell.descriptionImageView.image = UIImage(named: "chevron_right")
-//        slangsTableView.reloadRows(at: [selectedIndex], with: .automatic)
-//        print(selectedIndex)
         view.endEditing(true)
         if let test = slangsTableView.indexPathForSelectedRow {
             let cell = slangsTableView.cellForRow(at: test) as! SlangCell
@@ -136,7 +134,6 @@ class SlangListViewController: UIViewController, UIGestureRecognizerDelegate {
         if slangSearchBar.searchTextField.text!.count < 1 {
             view.endEditing(true)
         }
-        
     }
    
     override func viewWillAppear(_ animated: Bool) {
@@ -145,11 +142,6 @@ class SlangListViewController: UIViewController, UIGestureRecognizerDelegate {
  
     func setupSubviews() {
 
-        let addNewSlangBarButton = createCustomButton(image: "plus.circle.fill", title: "Добавить сленг", selector: #selector(addNewSlangTap))
-        
-        navigationItem.rightBarButtonItem = addNewSlangBarButton
-        navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "heart.fill"), style: .plain, target: self, action: #selector(favouritesButtonTap))
-        
         view.addSubview(contentView)
         contentView.translatesAutoresizingMaskIntoConstraints = false
         contentView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: (tabBarController?.tabBar.frame.height)!).isActive = true
@@ -172,14 +164,14 @@ class SlangListViewController: UIViewController, UIGestureRecognizerDelegate {
         presenter.heightForNoResultsLabel = noSlangsLabel.heightAnchor.constraint(equalToConstant: 0)
         presenter.heightForNoResultsLabel?.isActive = true
         
-        
         contentView.addSubview(slangsTableView)
         slangsTableView.translatesAutoresizingMaskIntoConstraints = false
         slangsTableView.topAnchor.constraint(equalTo: noSlangsLabel.bottomAnchor, constant: 0).isActive = true
         slangsTableView.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 0).isActive = true
         slangsTableView.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: 0).isActive = true
         slangsTableView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: 0).isActive = true
-        
+        slangsTableView.refreshControl = refreshControl
+
         view.addSubview(addSlangView)
         addSlangView.translatesAutoresizingMaskIntoConstraints = false
         addSlangView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -31).isActive = true
@@ -217,10 +209,7 @@ extension SlangListViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-       // return presenter.result.results.count
-        return presenter.filteredResults.count
-        
-        
+            return presenter.filteredResults.count
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -231,18 +220,8 @@ extension SlangListViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "slang_cell", for: indexPath) as! SlangCell
-        //cell.slangLabel.text = presenter.result.results[indexPath.row].title
-        
         cell.slangLabel.text = presenter.filteredResults[indexPath.row].title
         cell.selectionStyle = .blue
-//        if selectedIndex == indexPath {
-//            cell.backgroundColor = UIColor.white
-//            cell.descriptionImageView.image = UIImage(named: "chevron_down")
-//        } else {
-//            cell.backgroundColor = UIColor.rgb(red: 246, green: 246, blue: 251)
-//            cell.descriptionImageView.image = UIImage(named: "chevron_right")
-//        }
-        
         return cell
     }
     
@@ -259,8 +238,6 @@ extension SlangListViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
-       // selectedIndex = indexPath
         
         let cell = slangsTableView.cellForRow(at: indexPath) as! SlangCell
         cell.contentView.backgroundColor = .white
@@ -306,11 +283,12 @@ extension SlangListViewController: UITableViewDelegate {
     func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
         addSlangView.isHidden = false
     }
-//    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-//        if (model.result.count - indexPath.row < 4) {
-//            //request for next page
-//        }
-//    }
+    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        if (presenter.filteredResults.count - indexPath.row < 4) {
+            presenter.getNextWords(isRefresh: true)
+        }
+    }
     
 }
 
@@ -331,17 +309,13 @@ extension SlangListViewController: UISearchBarDelegate, UITextFieldDelegate {
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        print("return ")
         textField.resignFirstResponder()
-       
-        
         return true
     }
     
     func textFieldShouldClear(_ textField: UITextField) -> Bool {
-        print("clear tap")
+       
         textField.resignFirstResponder()
-       // view.endEditing(true)
       
         if textField.text?.count == 0 {
             view.endEditing(true)
@@ -351,6 +325,15 @@ extension SlangListViewController: UISearchBarDelegate, UITextFieldDelegate {
 }
 
 extension SlangListViewController: SlangListView {
+    func dismissKeyboardWhenSearchDidFinish() {
+        
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyBoard))
+        tap.delegate = self
+        tap.cancelsTouchesInView = false
+        self.view.addGestureRecognizer(tap)
+        
+    }
+    
     func cellTap(at index: Int) {
         let slangDescriptionViewController = SlangDescriptionViewController()
         if let sheet = slangDescriptionViewController.sheetPresentationController {
@@ -368,7 +351,22 @@ extension SlangListViewController: SlangListView {
     }
     
     func updateSlangList() {
-        slangsTableView.reloadData()
+        DispatchQueue.main.async {
+            self.slangsTableView.reloadData()
+        }
+        
+    }
+    
+    func refreshing() {
+        DispatchQueue.main.async {
+            self.refreshControl.beginRefreshing()
+        }
+    }
+    
+    func endRefreshing() {
+        DispatchQueue.main.async {
+            self.refreshControl.endRefreshing()
+        }
     }
 }
 
