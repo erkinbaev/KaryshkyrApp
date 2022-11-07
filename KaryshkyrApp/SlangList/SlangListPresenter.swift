@@ -28,8 +28,7 @@ protocol SlangListPresenterDelegate: AnyObject {
     func getNextWords(isRefresh: Bool)
     
     func observeData()
-    
-    func checkNetworkConnection()
+
     
 }
 
