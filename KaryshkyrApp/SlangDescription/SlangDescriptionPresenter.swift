@@ -43,7 +43,6 @@ class SlangDescriptionPresenter: SlangDescriptionPresenterDelegate{
             
             try! realm.write({
                 realm.add(slang)
-                print(slang.description)
                
             })
             

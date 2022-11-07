@@ -19,6 +19,8 @@ protocol SlangListView: AnyObject {
     func refreshing()
     
     func endRefreshing()
+    
+    func showAlert(alert: UIAlertController)
 }
 
 class SlangListViewController: UIViewController, UIGestureRecognizerDelegate {
@@ -101,8 +103,11 @@ class SlangListViewController: UIViewController, UIGestureRecognizerDelegate {
         self.presenter = SlangListPresenter(view: self)
         presenter.heightForNoResultsLabel?.constant = 0
         setupSubviews()
+        
         presenter.getWords(isRefresh: true, refreshControl: refreshControl)
         presenter.observeData()
+        
+        
         refreshControl.addTarget(self, action: #selector(refreshView), for: .valueChanged)
         presenter.dismissKeyboard()
         presenter.reloadCellWhenDescriptionViewDismissed(viewController: self, selector: #selector(reloadRow))
@@ -367,6 +372,10 @@ extension SlangListViewController: SlangListView {
         DispatchQueue.main.async {
             self.refreshControl.endRefreshing()
         }
+    }
+    
+    func showAlert(alert: UIAlertController) {
+        present(alert, animated: true, completion: nil)
     }
 }
 

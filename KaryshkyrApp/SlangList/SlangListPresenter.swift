@@ -29,6 +29,8 @@ protocol SlangListPresenterDelegate: AnyObject {
     
     func observeData()
     
+    func checkNetworkConnection()
+    
 }
 
 class SlangListPresenter : SlangListPresenterDelegate {
@@ -164,6 +166,7 @@ class SlangListPresenter : SlangListPresenterDelegate {
     func reloadCellWhenDescriptionViewDismissed(viewController: UIViewController, selector: Selector) {
         nc.addObserver(viewController.self, selector: selector, name: Notification.Name("dismissedAtList"), object: nil)
     }
+    
 }
 
 

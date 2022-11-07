@@ -43,6 +43,8 @@ class MainViewController: UITabBarController {
         
         setupSubviews()
         self.presenter = MainViewPresenter(view: self)
+       
+       
     }
     
     override func viewWillLayoutSubviews() {
