@@ -68,23 +68,24 @@ class FavouritesPresenter: FavouritesPresenterDelegate {
         if view.selectRows().indexPathsForSelectedRows?.count ?? 0 > 0 {
             let alert = UIAlertController(title: "Удаление!", message: "Ты уверен?", preferredStyle: .alert)
             
-            let yesAction = UIAlertAction(title: "УВЕРЕН", style: .cancel) { action in
-                self.view.removeData()
-            }
-            
-            let noAction = UIAlertAction(title: "НЕТ", style: .default) { action in
+            let noAction = UIAlertAction(title: "НЕТ", style: .cancel) { action in
                 ()
             }
             
-            alert.addAction(yesAction)
+            let yesAction = UIAlertAction(title: "УВЕРЕН", style: .default) { action in
+                self.view.removeData()
+            }
+            
             alert.addAction(noAction)
+            alert.addAction(yesAction)
             
             self.view.presentAlert(alert: alert)
         } else if view.selectRows().indexPathsForSelectedRows == nil {
             let alert = UIAlertController(title: "Нечего удалять!", message: "Поставь сначала галочки.", preferredStyle: .alert)
             
             let yesAction = UIAlertAction(title: "ОК", style: .cancel) { action in
-                ()
+                self.image = "chevron_right"
+                self.view.reloadTableView()
             }
             alert.addAction(yesAction)
             
@@ -94,7 +95,6 @@ class FavouritesPresenter: FavouritesPresenterDelegate {
         
     }
     
-
     func fillTableView() {
         for i in 0..<slangs!.count {
             let favourite = FavouriteModel(title: slangs![i].title, description: slangs![i].slangDescription)
@@ -102,7 +102,6 @@ class FavouritesPresenter: FavouritesPresenterDelegate {
         }
         reversedFavourites = favourites.reversed()
     }
-    
     
     func removeFromData() {
         for slang in slangsToRemove {

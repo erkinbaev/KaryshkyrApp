@@ -22,6 +22,8 @@ class SlangDescriptionPresenter: SlangDescriptionPresenterDelegate{
     
     private var counter = 0
     
+    private var isFavourite: Bool = false
+    
     private let realm = try! Realm()
     
     private var slangs: Results<Slang>?
@@ -33,30 +35,50 @@ class SlangDescriptionPresenter: SlangDescriptionPresenterDelegate{
     }
     
     func addToFavourites(title: String, description: String) {
-        if counter == 0 {
+        
+        let slang = Slang()
+        slang.title = title
+        slang.slangDescription = description
+
+        if isFavourite == false {
             view.favouriteImageStatus()
-            counter += 1
-            
-            let slang = Slang()
-            slang.title = title
-            slang.slangDescription = description
+            isFavourite = true
             
             try! realm.write({
                 realm.add(slang)
-               
             })
             
-            nc.post(name: Notification.Name("addedToFavorites"), object: nil)
-            DispatchQueue.main.async {
-                self.view.showToast()
-            }
+            view.showToast(title: "Добавлено в избранные")
             
+        } else if isFavourite == true {
+            
+            try! self.realm.write({
+                self.realm.delete(realm.objects(Slang.self).filter("title=%@",slang.title))
+            })
+            
+            view.unFavouriteImageStatus()
+            
+            view.showToast(title: "Удалено с избранных")
+            
+            isFavourite = false
+        }
+    }
+    
+    func isFavouriteCheck(title: String) {
+        self.slangs = realm.objects(Slang.self)
+        for slang in slangs! {
+            if slang.title == title {
+                isFavourite = true
+                break
+            } else if slang.title != title {
+                isFavourite = false
+            }
+        }
+        
+        if isFavourite == true {
+            view.favouriteImageStatus()
         } else {
-            DispatchQueue.main.async {
-                self.view.unFavouriteImageStatus()
-            }
-            counter = 0
-            
+            view.unFavouriteImageStatus()
         }
     }
     

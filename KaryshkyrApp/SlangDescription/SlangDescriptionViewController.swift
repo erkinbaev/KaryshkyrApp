@@ -14,7 +14,7 @@ protocol SlangDescriptionView: AnyObject {
     
     func unFavouriteImageStatus()
     
-    func showToast()
+    func showToast(title: String)
 }
 
 class SlangDescriptionViewController: UIViewController {
@@ -51,7 +51,7 @@ class SlangDescriptionViewController: UIViewController {
         view.backgroundColor = .white
         self.presenter = SlangDescriptionPresenter(view: self)
         setupSubviews()
-        
+        presenter.isFavouriteCheck(title: slangTitleLabel.text!)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -87,15 +87,21 @@ class SlangDescriptionViewController: UIViewController {
 
 extension SlangDescriptionViewController: SlangDescriptionView {
     func favouriteImageStatus() {
-        addToFavouritesImageView.image = UIImage(named: "fav_fill")
+        DispatchQueue.main.async {
+            self.addToFavouritesImageView.image = UIImage(named: "fav_fill")
+        }
     }
     
     func unFavouriteImageStatus() {
-        addToFavouritesImageView.image = UIImage(named: "fav")
+        DispatchQueue.main.async {
+            self.addToFavouritesImageView.image = UIImage(named: "fav")
+        }
     }
     
-    func showToast() {
-        self.view.makeToast("Добавлено в избранное", duration: 2.0, position: .bottom)
+    func showToast(title: String) {
+        DispatchQueue.main.async {
+            self.view.makeToast(title, duration: 1.5, position: .bottom)
+        }
     }
 }
 

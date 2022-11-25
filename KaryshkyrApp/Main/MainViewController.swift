@@ -16,8 +16,6 @@ protocol MainView: AnyObject {
     
     func presentViewController(viewController: UIViewController)
     
-    func changeTitleValue(with value: String)
-    
     func editButtonTap()
     
     func deleteButtonTap()
@@ -25,6 +23,7 @@ protocol MainView: AnyObject {
 }
 
 class MainViewController: UITabBarController {
+    
     
     let slangListViewController = SlangListViewController()
     let favouritesViewController = FavouritesViewController()
@@ -44,7 +43,23 @@ class MainViewController: UITabBarController {
         setupSubviews()
         self.presenter = MainViewPresenter(view: self)
        
-       
+        let swipeRight = UISwipeGestureRecognizer(target: self, action: #selector(swiped))
+        swipeRight.direction = UISwipeGestureRecognizer.Direction.right
+        self.view.addGestureRecognizer(swipeRight)
+
+        let swipeLeft = UISwipeGestureRecognizer(target: self, action: #selector(swiped))
+        swipeLeft.direction = UISwipeGestureRecognizer.Direction.left
+        self.view.addGestureRecognizer(swipeLeft)
+
+    }
+    
+    @objc func swiped(_ gesture: UISwipeGestureRecognizer) {
+        
+          if gesture.direction == .left {
+              self.selectedIndex += 1
+          } else if gesture.direction == .right {
+              self.selectedIndex -= 1
+          }
     }
     
     override func viewWillLayoutSubviews() {
@@ -117,10 +132,6 @@ extension MainViewController: MainView {
         presenter.nc.post(name: Notification.Name("stop_edit"), object: nil)
         let editBarButton = createCustomBarButton(image: "edit", selector: #selector(tapRightBarItem))
         navigationItem.rightBarButtonItem = editBarButton
-    }
-    
-    func changeTitleValue(with value: String) {
-        title = value
     }
     
     func clickFavourites() {

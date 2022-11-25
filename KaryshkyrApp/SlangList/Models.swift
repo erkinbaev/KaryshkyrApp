@@ -14,7 +14,7 @@ struct WordsResponse: Codable {
     var results: [WordModel]
 }
 
-struct WordModel: Codable {
+struct WordModel: Codable, Hashable {
     var title: String
     var description: String
     var is_verified: Bool

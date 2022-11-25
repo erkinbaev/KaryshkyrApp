@@ -66,7 +66,7 @@ class FavouritesViewController: UIViewController {
         self.presenter = FavouritesPresenter(view: self)
        
         setupSubviews()
-        updateView()
+        //updateView()
         presenter.observeEditingActions()
         presenter.dismissDescriptionView(selector: #selector(reloadCell), viewController: self)
     }
@@ -77,6 +77,10 @@ class FavouritesViewController: UIViewController {
         presenter.getFavourites()
         presenter.fillTableView()
         favouritesTableView.reloadData()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        updateView()
     }
     
     @objc func reloadCell() {
@@ -189,13 +193,12 @@ extension FavouritesViewController: FavouritesView {
     func cellTap(at index: Int) {
         let slangDescriptionViewController = SlangDescriptionViewController()
         if let sheet = slangDescriptionViewController.sheetPresentationController {
-            sheet.detents = [.medium()]
+            sheet.detents = [.medium(), .large()]
             sheet.largestUndimmedDetentIdentifier = .none
             
         }
         slangDescriptionViewController.slangTitleLabel.text = presenter.reversedFavourites[index].title
         slangDescriptionViewController.slangDescriptionLabel.text = presenter.reversedFavourites[index].description
-        print(presenter.reversedFavourites[index].description)
         slangDescriptionViewController.addToFavouritesImageView.isHidden = true
         present(slangDescriptionViewController, animated: true, completion: nil)
     }

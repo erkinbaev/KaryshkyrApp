@@ -17,100 +17,58 @@ protocol SlangListPresenterDelegate: AnyObject {
     
     func presentSlangAddView(viewController: UIViewController)
     
-    func searchSlang(text: String)
+    func searchSlang(text: String, searchBar: UISearchBar)
     
     func reloadCellWhenDescriptionViewDismissed(viewController: UIViewController, selector: Selector)
     
     func dismissKeyboard()
     
-    func getWords(isRefresh: Bool, refreshControl: UIRefreshControl)
-    
-    func getNextWords(isRefresh: Bool)
-    
     func observeData()
-
     
+    func loadWords()
+
 }
 
 class SlangListPresenter : SlangListPresenterDelegate {
+    
+    var model: WordsResponse? = nil
+    
+    var offset = 0
     
     private let nc = NotificationCenter.default
     
     public weak var view: SlangListView!
     
-    static var words: [WordModel] = []
-    
-    private var result = WordsResponse(count: 0, next: "", results: words)
-    
     var filteredResults: [WordModel] = []
     
-    private var data: [WordModel] = []
-    
-    private var slangs: [WordModel] = []
+    var data: [WordModel] = []
     
     var heightForNoResultsLabel: NSLayoutConstraint? = nil
     
+    var heightForTableView: NSLayoutConstraint? = nil
+    
     private var networkApi = NetworkApi()
-    
-    private var offset = 0
-    
-    private var limit = 0
     
     required init(view: SlangListView) {
         self.view = view
     }
     
-    private func getVerifiedSlangs(words: [WordModel]) {
-        for i in result.results {
-            if i.is_verified {
-                filteredResults.append(i)
-                data.append(i)
-            }
-        }
-    }
-    
     func observeData() {
-        if result.count == 0 {
+        if model?.results.count == 0 {
             view.refreshing()
         } else {
             view.endRefreshing()
         }
     }
     
-    func getWords(isRefresh: Bool, refreshControl: UIRefreshControl) {
-       
-        networkApi.getWords(isRefresh: isRefresh, refreshControl: refreshControl) { words in
-            self.result = WordsResponse(count: words.count, next: words.next, previous: words.previous, results: words.results)
-            for i in words.results {
-                if i.is_verified {
-                    self.filteredResults.append(i)
-                    self.data.append(i)
-                }
-            }
-            self.view.updateSlangList()
-        }
-    }
-    
-    func getNextWords(isRefresh: Bool) {
-        
-        if result.next != nil {
-            networkApi.getNextWords(next: result.next!) { words in
-    
-                self.result.next = words.next
-                
-                for i in words.results {
-                    if i.is_verified {
-                        self.filteredResults.append(i)
-                        self.data.append(i)
-                    }
-                }
-                
-                self.view.updateSlangList()
-                
-            }
-        } else {
-            DispatchQueue.main.async {
-                self.view.endRefreshing()
+    func loadWords() {
+        networkApi.loadWord(offset: offset) { [self] response in
+            switch response {
+            case .success(let data):
+                self.view.reciveWords(words: data.results)
+                self.model = data
+            case .failure(let error):
+                view.reciveErrorMessage(message: error.localizedDescription)
             }
         }
     }
@@ -127,20 +85,23 @@ class SlangListPresenter : SlangListPresenterDelegate {
         view.navigate(viewController: viewController)
     }
     
-    func searchSlang(text: String) {
-        filteredResults = []
+    func searchSlang(text: String, searchBar: UISearchBar) {
         
+        filteredResults = []
+
         if text == "" {
             filteredResults = data
             self.heightForNoResultsLabel?.constant = 0
-        }
-        
-        for slang in self.data{
-            if slang.title.uppercased().contains(text.uppercased()) {
-                filteredResults.append(slang)
+            view.unhideSearchImage(searchBar: searchBar)
+        } else {
+            view.hideSearchImage(searchBar: searchBar)
+            for i in 0..<self.data.count {
+                    if data[i].title.uppercased().contains(text.uppercased()) {
+                        filteredResults.append(data[i])
+                    }
             }
         }
-        
+
         if filteredResults.count == 0 {
             DispatchQueue.main.async {
                 self.heightForNoResultsLabel?.constant = 80

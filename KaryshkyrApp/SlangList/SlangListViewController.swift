@@ -21,6 +21,16 @@ protocol SlangListView: AnyObject {
     func endRefreshing()
     
     func showAlert(alert: UIAlertController)
+    
+    func hideSearchImage(searchBar: UISearchBar)
+    
+    func unhideSearchImage(searchBar: UISearchBar)
+    
+    func reciveWords(words: [WordModel])
+    
+    func reciveErrorMessage(message: String?)
+    
+    
 }
 
 class SlangListViewController: UIViewController, UIGestureRecognizerDelegate {
@@ -69,6 +79,7 @@ class SlangListViewController: UIViewController, UIGestureRecognizerDelegate {
         let view = UITableView()
         view.register(SlangCell.self, forCellReuseIdentifier: "slang_cell")
         view.backgroundColor = UIColor.rgb(red: 246, green: 246, blue: 251)
+        view.showsVerticalScrollIndicator = false
         view.dataSource = self
         view.delegate = self
         return view
@@ -104,28 +115,21 @@ class SlangListViewController: UIViewController, UIGestureRecognizerDelegate {
         presenter.heightForNoResultsLabel?.constant = 0
         setupSubviews()
         
-        presenter.getWords(isRefresh: true, refreshControl: refreshControl)
+        presenter.loadWords()
         presenter.observeData()
-        
         
         refreshControl.addTarget(self, action: #selector(refreshView), for: .valueChanged)
         presenter.dismissKeyboard()
         presenter.reloadCellWhenDescriptionViewDismissed(viewController: self, selector: #selector(reloadRow))
     }
     
-    @objc func refresView() {
-        presenter.getNextWords(isRefresh: true)
+    @objc func refreshView() {
+        presenter.loadWords()
         DispatchQueue.main.async {
             self.refreshControl.endRefreshing()
         }
     }
     
-    @objc func refreshView() {
-            DispatchQueue.main.async {
-                self.refreshControl.endRefreshing()
-            }
-    }
-
     @objc func reloadRow() {
         view.endEditing(true)
         if let test = slangsTableView.indexPathForSelectedRow {
@@ -175,6 +179,7 @@ class SlangListViewController: UIViewController, UIGestureRecognizerDelegate {
         slangsTableView.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 0).isActive = true
         slangsTableView.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: 0).isActive = true
         slangsTableView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: 0).isActive = true
+        
         slangsTableView.refreshControl = refreshControl
 
         view.addSubview(addSlangView)
@@ -214,7 +219,9 @@ extension SlangListViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-            return presenter.filteredResults.count
+        
+        return presenter.filteredResults.count
+        
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -224,10 +231,12 @@ extension SlangListViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+
         let cell = tableView.dequeueReusableCell(withIdentifier: "slang_cell", for: indexPath) as! SlangCell
         cell.slangLabel.text = presenter.filteredResults[indexPath.row].title
         cell.selectionStyle = .blue
         return cell
+
     }
     
 }
@@ -264,34 +273,21 @@ extension SlangListViewController: UITableViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if self.lastContentOffset < scrollView.contentOffset.y {
             addSlangView.isHidden = true
+            self.lastContentOffset = 0
             } else {
-                addSlangView.isHidden = false
+               addSlangView.isHidden = false
             }
-        
-        let height = scrollView.frame.size.height
-            let contentYOffset = scrollView.contentOffset.y
-            let distanceFromBottom = scrollView.contentSize.height - contentYOffset
-
-            if distanceFromBottom < height {
-                addSlangView.isHidden = false
-            }
-    }
     
-    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        addSlangView.isHidden = false
-    }
-    
-    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        addSlangView.isHidden = false
-    }
-    
-    func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
-        addSlangView.isHidden = false
     }
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        if (presenter.filteredResults.count - indexPath.row < 4) {
-            presenter.getNextWords(isRefresh: true)
+     
+        if (presenter.filteredResults.count - indexPath.row) < 10 {
+            if (presenter.model?.next) != nil {
+                presenter.offset += 50
+                presenter.loadWords()
+               
+            }
         }
     }
     
@@ -303,14 +299,10 @@ extension SlangListViewController: UISearchBarDelegate, UITextFieldDelegate {
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        if searchText == "" {
-            searchBar.setImage(UIImage(named: "search"), for: .search, state: .normal)
-            view.endEditing(true)
-        } else {
-            searchBar.setImage(UIImage(), for: .search, state: .normal)
-        }
         
-        presenter.searchSlang(text: searchText)
+        presenter.searchSlang(text: searchText, searchBar: searchBar)
+                                                              
+        slangsTableView.reloadData()
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
@@ -342,7 +334,7 @@ extension SlangListViewController: SlangListView {
     func cellTap(at index: Int) {
         let slangDescriptionViewController = SlangDescriptionViewController()
         if let sheet = slangDescriptionViewController.sheetPresentationController {
-            sheet.detents = [.medium()]
+            sheet.detents = [.medium(), .large()]
             sheet.largestUndimmedDetentIdentifier = .none
             
         }
@@ -377,5 +369,35 @@ extension SlangListViewController: SlangListView {
     func showAlert(alert: UIAlertController) {
         present(alert, animated: true, completion: nil)
     }
+    
+    func hideSearchImage(searchBar: UISearchBar) {
+        searchBar.setImage(UIImage(), for: .search, state: .normal)
+    }
+    
+    func unhideSearchImage(searchBar: UISearchBar) {
+        searchBar.setImage(UIImage(named: "search"), for: .search, state: .normal)
+        self.view.endEditing(true)
+    }
+    func reciveWords(words: [WordModel]) {
+        var arrayVerified: [WordModel] = []
+        for word in words {
+            if word.is_verified {
+                arrayVerified.append(word)
+            }
+        }
+        presenter.data.append(contentsOf: arrayVerified)
+        presenter.filteredResults.append(contentsOf: arrayVerified)
+        slangsTableView.reloadData()
+    }
+    
+    func reciveErrorMessage(message: String?) {
+        if let msg = message {
+            print(msg)
+        } else {
+            print("Что-то пошло не так")
+        }
+    }
+    
+    
 }
 
