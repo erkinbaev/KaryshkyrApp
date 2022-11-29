@@ -18,7 +18,6 @@ protocol FavouritesPresenterDelegate: AnyObject {
     func dismissDescriptionView(selector: Selector, viewController: UIViewController)
 }
 
-
 class FavouritesPresenter: FavouritesPresenterDelegate {
     
     private let nc = NotificationCenter.default
@@ -34,7 +33,6 @@ class FavouritesPresenter: FavouritesPresenterDelegate {
     var slangsToRemove: [Slang] = []
     
     private var counter = 0
-    
     
     var favourites: [FavouriteModel] = []
     
@@ -69,7 +67,8 @@ class FavouritesPresenter: FavouritesPresenterDelegate {
             let alert = UIAlertController(title: "Удаление!", message: "Ты уверен?", preferredStyle: .alert)
             
             let noAction = UIAlertAction(title: "НЕТ", style: .cancel) { action in
-                ()
+                self.image = "chevron_right"
+                self.view.reloadTableView()
             }
             
             let yesAction = UIAlertAction(title: "УВЕРЕН", style: .default) { action in
@@ -91,8 +90,6 @@ class FavouritesPresenter: FavouritesPresenterDelegate {
             
             self.view.presentAlert(alert: alert)
         }
-        
-        
     }
     
     func fillTableView() {

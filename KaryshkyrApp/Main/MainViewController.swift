@@ -57,8 +57,10 @@ class MainViewController: UITabBarController {
         
           if gesture.direction == .left {
               self.selectedIndex += 1
+              presenter.updateRightBarOnFavourites()
           } else if gesture.direction == .right {
               self.selectedIndex -= 1
+              presenter.updateRightBarOnSlangList()
           }
     }
     
