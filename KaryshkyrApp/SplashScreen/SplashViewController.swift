@@ -24,15 +24,6 @@ class SplashViewController: UIViewController {
         return view
     }()
     
-    private lazy var brandLabel: UILabel = {
-        let view = UILabel()
-        view.text = "Made by GeekStudio"
-        view.textColor = .white
-        view.font = UIFont(name: "RobotoLight", size: 19)
-        view.numberOfLines = 1
-        return view
-    }()
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -48,12 +39,6 @@ class SplashViewController: UIViewController {
         backgroundView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 0).isActive = true
         backgroundView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: 0).isActive = true
         
-        view.addSubview(brandLabel)
-        brandLabel.translatesAutoresizingMaskIntoConstraints = false
-        brandLabel.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -32).isActive = true
-        brandLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: 2.4).isActive = true
-        brandLabel.heightAnchor.constraint(equalToConstant: 22).isActive = true
-        brandLabel.widthAnchor.constraint(equalToConstant: 165).isActive = true
     }
     
     func imageDownAnimation() {

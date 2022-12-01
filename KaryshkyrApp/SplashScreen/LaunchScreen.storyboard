@@ -6,11 +6,6 @@
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
-    <customFonts key="customFonts">
-        <array key="RobotoLight.ttf">
-            <string>Roboto-Light</string>
-        </array>
-    </customFonts>
     <scenes>
         <!--View Controller-->
         <scene sceneID="EHf-IW-A2E">
@@ -24,25 +19,14 @@
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Made by GeekStudio" textAlignment="natural" lineBreakMode="tailTruncation" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Wn5-EU-0Q8">
-                                <rect key="frame" x="130.5" y="843" width="153" height="21"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="21" id="tsZ-Zd-0WJ"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" name="Roboto-Light" family="Roboto" pointSize="17"/>
-                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="7V4-0l-H5U"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstAttribute="bottom" secondItem="0xK-u1-FJM" secondAttribute="bottom" id="5KA-Hz-ZsD"/>
-                            <constraint firstAttribute="bottomMargin" secondItem="Wn5-EU-0Q8" secondAttribute="bottom" constant="32" id="61E-HC-uvX"/>
                             <constraint firstItem="0xK-u1-FJM" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="top" id="9nW-OZ-d5m"/>
                             <constraint firstAttribute="trailing" secondItem="0xK-u1-FJM" secondAttribute="trailing" id="Lpv-6C-40B"/>
                             <constraint firstItem="0xK-u1-FJM" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" id="Me3-8Q-Yi2"/>
-                            <constraint firstItem="Wn5-EU-0Q8" firstAttribute="centerX" secondItem="0xK-u1-FJM" secondAttribute="centerX" id="Ul1-NH-ubC"/>
                         </constraints>
                     </view>
                 </viewController>
